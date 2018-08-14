@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
-import '../App.css';
 import { connect } from 'react-redux'
+import { Grid, Menu } from 'semantic-ui-react'
 
 class CategoryList extends Component {
-  state = {}
+  state = { activeItem: 'all' }
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
   render() {
-    const {categories} = this.props
+    const { activeItem } = this.state
+    const { categories } = this.props
 
     return (
-      <div>
-        <p>CATEGORIAS</p>
-        <ol>
+      <Grid.Column width={2} stretched>
+        <Menu fluid vertical tabular>
+          <Menu.Item name='all' active={activeItem === 'all'} onClick={this.handleItemClick} />
           {categories.map(c => (
-            <li key={c.name}>{c.path}</li>
+            <Menu.Item key={c.name} name={c.path} active={activeItem === c.path} onClick={this.handleItemClick} />
           ))}
-        </ol>
-      </div>
+        </Menu>
+      </Grid.Column>
     )
   }
 }

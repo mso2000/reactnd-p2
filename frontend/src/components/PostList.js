@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import '../App.css';
 import { connect } from 'react-redux'
+import { Grid, Segment } from 'semantic-ui-react'
+
 
 class PostList extends Component {
   state = {}
@@ -9,19 +10,17 @@ class PostList extends Component {
     const {posts} = this.props
 
     return (
-      <div>
-        <p>POSTS</p>
-        <ol>
-          {posts.map(p => (
-            <li key={p.id}>{p.title}</li>
+      <Grid.Column stretched>
+        {posts.map(p => (
+          <Segment key={p.id}>{p.title}</Segment>
           ))}
-        </ol>
-      </div>
+      </Grid.Column>
     )
   }
 }
 
 function mapStateToProps ({ posts }) {
+  console.log(posts)
   return { posts }
 }
 

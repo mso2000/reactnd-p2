@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import '../App.css';
 import * as ServerAPI from '../utils/ServerAPI'
 import { connect } from 'react-redux'
 import { addAllCategories, addAllPosts } from '../actions'
 import CategoryList from './CategoryList'
 import PostList from './PostList'
+import { Grid, Header, Image } from 'semantic-ui-react'
 
 class App extends Component {
   state = {}
@@ -17,10 +17,19 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <CategoryList />
-        <PostList />
-      </div>
+      <Grid divided='vertically' columns='equal'>
+        <Grid.Row columns={1} align='left'>
+          <Grid.Column>
+            <Header as='h2'>
+              <Image circular src='/favicon.ico' /> Leitura
+              </Header>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row columns={2}>
+          <CategoryList />
+          <PostList />
+        </Grid.Row>
+      </Grid>
     )
   }
 }
