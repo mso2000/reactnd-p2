@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Grid, Segment } from 'semantic-ui-react'
-
+import { formatData } from '../utils/helpers'
+import sortBy from 'sort-by'
 
 class PostList extends Component {
   state = {}
 
   render() {
-    const {posts} = this.props
+    const { posts, sortOrder } = this.props
+    const sortedPosts = posts.sort(sortBy(sortOrder))
 
     return (
       <Grid.Column stretched>
-        {posts.map(p => (
-          <Segment key={p.id}>{p.title}</Segment>
+        {sortedPosts.map(p => (
+          <Segment key={p.id}>[{formatData(p.timestamp)}] {p.title}</Segment>
           ))}
       </Grid.Column>
     )
@@ -20,7 +22,6 @@ class PostList extends Component {
 }
 
 function mapStateToProps ({ posts }) {
-  console.log(posts)
   return { posts }
 }
 

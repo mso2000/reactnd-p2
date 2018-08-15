@@ -7,7 +7,7 @@ import PostList from './PostList'
 import { Grid, Header, Image } from 'semantic-ui-react'
 
 class App extends Component {
-  state = {}
+  state = { sortOrder: '-timestamp' }
 
   componentDidMount(){
     const {addCategories, addPosts} = this.props
@@ -17,7 +17,7 @@ class App extends Component {
 
   render() {
     return (
-      <Grid divided='vertically' columns='equal'>
+      <Grid divided='vertically' columns='equal' style={{ padding: '1em' }}>
         <Grid.Row columns={1} align='left'>
           <Grid.Column>
             <Header as='h2'>
@@ -27,7 +27,7 @@ class App extends Component {
         </Grid.Row>
         <Grid.Row columns={2}>
           <CategoryList />
-          <PostList />
+          <PostList sortOrder={ this.state.sortOrder }/>
         </Grid.Row>
       </Grid>
     )
