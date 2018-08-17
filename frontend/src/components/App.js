@@ -6,6 +6,7 @@ import HeaderMenu from './HeaderMenu'
 import CategoryMenu from './CategoryMenu'
 import PostList from './PostList'
 import { Grid } from 'semantic-ui-react'
+import { Route, Redirect, Switch } from 'react-router-dom'
 
 class App extends Component {
   state = {
@@ -14,6 +15,9 @@ class App extends Component {
   }
 
   changeCategory = (category) => {
+    const { addCategories, addPosts } = this.props
+    ServerAPI.getAllCategories().then(c => addCategories(c))
+    ServerAPI.getAllPosts().then(p => addPosts(p))
     this.setState({ selectedCategory: category })
   }
 
@@ -28,7 +32,8 @@ class App extends Component {
   }
 
   render() {
-    const { selectedCategory, sortOrder} = this.state
+    const { sortOrder } = this.state
+
     return (
       <Grid divided='vertically' columns='equal' style={{ padding: '1em' }}>
         <Grid.Row columns={1}>
@@ -37,21 +42,73 @@ class App extends Component {
             onChangeOrder = { this.changeOrder }
           />
         </Grid.Row>
-        <Grid.Row columns={2}>
-          <CategoryMenu
-            selectedCategory = { selectedCategory }
-            onChangeCategory = { this.changeCategory }
-          />
-          <PostList
-            sortOrder={ sortOrder }
-            selectedCategory = { selectedCategory }
-          />
-        </Grid.Row>
+        <Switch>
+          <Route exact path = '/' render = { this.doRoute } />
+          <Route exact path = '/:category' render = { this.doRoute } />
+          <Redirect to="/" />
+        </Switch>
       </Grid>
     )
   }
+
+  doRoute = (props) => {
+    const { selectedCategory, sortOrder} = this.state
+    const { categories } = this.props
+
+    return (<HandlerRoute
+      {...props}
+      categories = { categories }
+      sortOrder = { sortOrder }
+      selectedCategory = { selectedCategory }
+      onChangeCategory = { this.changeCategory } />)
+  }
 }
 
+
+class HandlerRoute extends Component {
+
+  state = { invalidRoute: '' }
+
+  componentDidUpdate(prevProps){
+    if(prevProps.categories !== this.props.categories){
+      const { categories, selectedCategory, match, onChangeCategory } = this.props
+      const path =  match.url.split("/").pop()
+      const newCategoryFound = categories.find(c => c.path === path)
+
+      if (newCategoryFound){
+        const newCategory = newCategoryFound.path
+        if (selectedCategory !== newCategory)
+          onChangeCategory(newCategory.length ? newCategory : 'all')
+      } else {
+        this.setState({ invalidRoute: path })
+        onChangeCategory('all')
+      }
+    }
+  }
+
+  render() {
+    const { selectedCategory, sortOrder, onChangeCategory } = this.props
+
+    return (this.state.invalidRoute.length ? (
+      <Redirect to="/" />
+    ) : (
+      <Grid.Row columns={2}>
+        <CategoryMenu
+          selectedCategory = { selectedCategory }
+          onChangeCategory = { onChangeCategory }
+        />
+        <PostList
+          sortOrder={ sortOrder }
+          selectedCategory = { selectedCategory }
+        />
+      </Grid.Row>
+    ))
+  }
+}
+
+function mapStateToProps ({ categories }) {
+  return { categories }
+}
 
 function mapDispatchToProps (dispatch) {
   return {
@@ -61,6 +118,6 @@ function mapDispatchToProps (dispatch) {
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(App)

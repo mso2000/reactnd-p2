@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Grid, Menu } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
 
 class CategoryMenu extends Component {
   state = { }
@@ -13,9 +14,9 @@ class CategoryMenu extends Component {
     return (
       <Grid.Column width={2} stretched>
         <Menu fluid vertical tabular>
-          <Menu.Item name='all' active={selectedCategory === 'all'} onClick={this.handleItemClick} />
+          <Menu.Item as={Link} to='/' name='all' active={selectedCategory === 'all'} onClick={this.handleItemClick} />
           {categories.map(c => (
-            <Menu.Item key={c.name} name={c.path} active={selectedCategory === c.path} onClick={this.handleItemClick} />
+            <Menu.Item as={Link} to={'/' + c.path} key={c.name} name={c.path} active={selectedCategory === c.path} onClick={this.handleItemClick} />
           ))}
         </Menu>
       </Grid.Column>
