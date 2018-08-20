@@ -1,19 +1,49 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Grid, Menu, Header, Image, Button, Modal, Form } from 'semantic-ui-react'
+import serializeForm from 'form-serialize'
 
 
 class HeaderMenu extends Component {
-  state = { newPostModalOpen: false }
+  state = {
+    newPostModalOpen: false,
+    formIsInvalid: false,
+    category: '',
+    title: '',
+    author: '',
+    body: ''
+  }
 
   handleItemClick = (e, obj) => this.props.onChangeOrder(obj.name)
   openNewPostModal = () => this.setState(() => ({ newPostModalOpen: true }))
   closeNewPostModal = () => this.setState(() => ({ newPostModalOpen: false }))
 
+  handleChange = (e, { value }) => {
+    this.setState({ category: value })
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault()
+    const formValues = serializeForm(e.target, { hash: true })
+    formValues.title = formValues.hasOwnProperty('title') ? formValues.title : ''
+    formValues.author = formValues.hasOwnProperty('author') ? formValues.author : ''
+    formValues.body = formValues.hasOwnProperty('body') ? formValues.body : ''
+    formValues.formIsInvalid = !(formValues.title.length
+      && formValues.author.length
+      && formValues.body.length
+      && this.state.category.length)
+
+    if(!formValues.formIsInvalid)
+      this.closeNewPostModal()
+
+    this.setState(formValues)
+  }
+
 
   render() {
     const { categories, sortOrder } = this.props
-    const { newPostModalOpen } = this.state
+    const { newPostModalOpen, formIsInvalid, category, title, author, body } = this.state
+
     const options = categories.reduce((accumulator, currentValue) => {
       accumulator.push(
         {
@@ -46,18 +76,28 @@ class HeaderMenu extends Component {
               <Modal.Header>Criar um novo post</Modal.Header>
               <Modal.Content image>
                 <Modal.Description>
-                  <Form>
-                    <Form.Field>
-                      <label>Título</label>
-                      <input placeholder='Título' />
-                    </Form.Field>
-                    <Form.Field>
-                      <label>Autor</label>
-                      <input placeholder='Autor:' />
-                    </Form.Field>
-                    <Form.TextArea label='Corpo' placeholder='Corpo' />
-                    <Form.Select fluid label='Categoria' options={options} placeholder='Escolha uma categoria' />
-                    <Button type='submit' primary onClick={ this.closeNewPostModal }>Criar</Button>
+                  <Form onSubmit={this.handleSubmit}>
+                    { formIsInvalid && !title.length ? (
+                      <Form.Input error name='title' label='Título' placeholder='title' />
+                    ) : (
+                      <Form.Input name='title' label='Título' placeholder='title' />
+                    )}
+                    { formIsInvalid && !author.length ? (
+                      <Form.Input error name='author' label='Autor' placeholder='Autor' />
+                    ) : (
+                      <Form.Input name='author' label='Autor' placeholder='Autor' />
+                    )}
+                    { formIsInvalid && !body.length ? (
+                      <Form.TextArea error name='body' label='Corpo' placeholder='Corpo' />
+                    ) : (
+                      <Form.TextArea name='body' label='Corpo' placeholder='Corpo' />
+                    )}
+                    { formIsInvalid && !category.length ? (
+                      <Form.Select error fluid label='Categoria' options={options} placeholder='Escolha uma categoria' onChange={ this.handleChange }/>
+                    ) : (
+                      <Form.Select fluid label='Categoria' options={options} placeholder='Escolha uma categoria' onChange={ this.handleChange }/>
+                    )}
+                    <Button primary>Criar</Button>
                   </Form>
                 </Modal.Description>
               </Modal.Content>
