@@ -28,6 +28,12 @@ class App extends Component {
 
   addNewPost = (post) => {
     this.props.addNewPost(post)
+    ServerAPI.addPost(post)
+    .then(res => {
+      if(!res.hasOwnProperty('id'))
+        console.log('erro na inserção')
+        // TODO: Fazer Rollback
+    })
   }
 
   componentDidMount(){

@@ -10,7 +10,7 @@ class PostList extends Component {
   render() {
     const { posts, sortOrder, selectedCategory } = this.props
     const sortedPosts = (selectedCategory === 'all'
-    ? posts
+    ? posts.filter(p => p.hasOwnProperty('id'))
     : posts.filter(p => p.category === selectedCategory))
     .sort(sortBy('-' + sortOrder))
 
