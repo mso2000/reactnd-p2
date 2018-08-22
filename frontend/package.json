@@ -19,7 +19,8 @@
     "redux-logger": "^3.0.6",
     "semantic-ui-css": "^2.3.3",
     "semantic-ui-react": "^0.82.2",
-    "sort-by": "^1.2.0"
+    "sort-by": "^1.2.0",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",

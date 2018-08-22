@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Grid, Menu, Header, Image, Button, Modal, Form } from 'semantic-ui-react'
 import serializeForm from 'form-serialize'
 
-
 class HeaderMenu extends Component {
   state = {
     newPostModalOpen: false,
@@ -16,7 +15,14 @@ class HeaderMenu extends Component {
 
   handleItemClick = (e, obj) => this.props.onChangeOrder(obj.name)
   openNewPostModal = () => this.setState(() => ({ newPostModalOpen: true }))
-  closeNewPostModal = () => this.setState(() => ({ newPostModalOpen: false }))
+  closeNewPostModal = () => this.setState(() => ({
+    newPostModalOpen: false,
+    formIsInvalid: false,
+    category: '',
+    title: '',
+    author: '',
+    body: ''
+  }))
 
   handleChange = (e, { value }) => {
     this.setState({ category: value })
@@ -25,18 +31,23 @@ class HeaderMenu extends Component {
   handleSubmit = (e) => {
     e.preventDefault()
     const formValues = serializeForm(e.target, { hash: true })
+    formValues.category = this.state.category
     formValues.title = formValues.hasOwnProperty('title') ? formValues.title : ''
     formValues.author = formValues.hasOwnProperty('author') ? formValues.author : ''
     formValues.body = formValues.hasOwnProperty('body') ? formValues.body : ''
-    formValues.formIsInvalid = !(formValues.title.length
+
+    const formIsInvalid = !(formValues.title.length
       && formValues.author.length
       && formValues.body.length
-      && this.state.category.length)
+      && formValues.category.length)
 
-    if(!formValues.formIsInvalid)
+    if(!formIsInvalid){
+      const uuidv4 = require('uuid/v4');
+      this.props.onAddPost({...formValues, id: uuidv4(), timestamp: Date.now()})
       this.closeNewPostModal()
+    }
 
-    this.setState(formValues)
+    this.setState({...formValues, formIsInvalid})
   }
 
 

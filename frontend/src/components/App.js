@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as ServerAPI from '../utils/ServerAPI'
 import { connect } from 'react-redux'
-import { addAllCategories, addAllPosts } from '../actions'
+import { addAllCategories, addAllPosts, addNewPost } from '../actions'
 import HeaderMenu from './HeaderMenu'
 import CategoryMenu from './CategoryMenu'
 import PostList from './PostList'
@@ -11,7 +11,7 @@ import { Route, Redirect, Switch } from 'react-router-dom'
 class App extends Component {
   state = {
     selectedCategory: 'all',
-    sortOrder: 'timestamp'
+    sortOrder: 'voteScore'
   }
 
   changeCategory = (category) => {
@@ -24,6 +24,10 @@ class App extends Component {
 
   changeOrder = (order) => {
     this.setState({ sortOrder: order })
+  }
+
+  addNewPost = (post) => {
+    this.props.addNewPost(post)
   }
 
   componentDidMount(){
@@ -42,6 +46,7 @@ class App extends Component {
           <HeaderMenu
             sortOrder = { sortOrder }
             onChangeOrder = { this.changeOrder }
+            onAddPost = { this.addNewPost }
           />
         </Grid.Row>
         <Switch>
@@ -82,7 +87,8 @@ function mapStateToProps ({ categories }) {
 function mapDispatchToProps (dispatch) {
   return {
     addCategories: (data) => dispatch(addAllCategories(data)),
-    addPosts: (data) => dispatch(addAllPosts(data))
+    addPosts: (data) => dispatch(addAllPosts(data)),
+    addNewPost: (data) => dispatch(addNewPost(data))
   }
 }
 
