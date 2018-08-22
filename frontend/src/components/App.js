@@ -16,6 +16,7 @@ class App extends Component {
 
   changeCategory = (category) => {
     const { addCategories, addPosts } = this.props
+    console.log(category)
     ServerAPI.getAllCategories().then(c => addCategories(c))
     ServerAPI.getAllPosts().then(p => addPosts(p))
     this.setState({ selectedCategory: category })
@@ -26,6 +27,7 @@ class App extends Component {
   }
 
   componentDidMount(){
+    console.log('all')
     const { addCategories, addPosts } = this.props
     ServerAPI.getAllCategories().then(c => addCategories(c))
     ServerAPI.getAllPosts().then(p => addPosts(p))
@@ -53,56 +55,23 @@ class App extends Component {
 
   doRoute = (props) => {
     const { selectedCategory, sortOrder} = this.state
-    const { categories } = this.props
 
-    return (<HandlerRoute
-      {...props}
-      categories = { categories }
-      sortOrder = { sortOrder }
-      selectedCategory = { selectedCategory }
-      onChangeCategory = { this.changeCategory } />)
-  }
-}
+    const matchedCategory = props.match.params.category ? props.match.params.category : 'all'
 
-
-class HandlerRoute extends Component {
-
-  state = { invalidRoute: '' }
-
-  componentDidUpdate(prevProps){
-    if(prevProps.categories !== this.props.categories){
-      const { categories, selectedCategory, match, onChangeCategory } = this.props
-      const path =  match.url.split("/").pop()
-      const newCategoryFound = categories.find(c => c.path === path)
-
-      if (newCategoryFound){
-        const newCategory = newCategoryFound.path
-        if (selectedCategory !== newCategory)
-          onChangeCategory(newCategory.length ? newCategory : 'all')
-      } else {
-        this.setState({ invalidRoute: path })
-        onChangeCategory('all')
-      }
-    }
-  }
-
-  render() {
-    const { selectedCategory, sortOrder, onChangeCategory } = this.props
-
-    return (this.state.invalidRoute.length ? (
-      <Redirect to="/" />
-    ) : (
+    return (
       <Grid.Row columns={2}>
         <CategoryMenu
           selectedCategory = { selectedCategory }
-          onChangeCategory = { onChangeCategory }
+          matchedCategory = { matchedCategory }
+          history = { props.history }
+          onChangeCategory = { this.changeCategory }
         />
         <PostList
           sortOrder={ sortOrder }
           selectedCategory = { selectedCategory }
         />
       </Grid.Row>
-    ))
+    )
   }
 }
 
