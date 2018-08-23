@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as ServerAPI from '../utils/ServerAPI'
 import { connect } from 'react-redux'
-import { addAllCategories, addAllPosts, addNewPost } from '../actions'
+import { addAllCategories, addAllPosts, addNewPost, deletePost } from '../actions'
 import HeaderMenu from './HeaderMenu'
 import CategoryMenu from './CategoryMenu'
 import PostList from './PostList'
@@ -20,6 +20,7 @@ class App extends Component {
     ServerAPI.getAllCategories().then(c => addCategories(c))
     ServerAPI.getAllPosts().then(p => addPosts(p))
     this.setState({ selectedCategory: category })
+    // TODO: Tratar .catch()
   }
 
   changeOrder = (order) => {
@@ -34,6 +35,11 @@ class App extends Component {
         console.log('erro na inserção')
         // TODO: Fazer Rollback
     })
+    // TODO: Tratar .catch()
+  }
+
+  deletePost = (post) => {
+    this.props.deletePost(post)
   }
 
   componentDidMount(){
@@ -41,6 +47,7 @@ class App extends Component {
     const { addCategories, addPosts } = this.props
     ServerAPI.getAllCategories().then(c => addCategories(c))
     ServerAPI.getAllPosts().then(p => addPosts(p))
+    // TODO: Tratar .catch()
   }
 
   render() {
@@ -80,6 +87,7 @@ class App extends Component {
         <PostList
           sortOrder={ sortOrder }
           selectedCategory = { selectedCategory }
+          onDeletePost = { this.deletePost }
         />
       </Grid.Row>
     )
@@ -94,7 +102,8 @@ function mapDispatchToProps (dispatch) {
   return {
     addCategories: (data) => dispatch(addAllCategories(data)),
     addPosts: (data) => dispatch(addAllPosts(data)),
-    addNewPost: (data) => dispatch(addNewPost(data))
+    addNewPost: (data) => dispatch(addNewPost(data)),
+    deletePost: (data) => dispatch(deletePost(data))
   }
 }
 
