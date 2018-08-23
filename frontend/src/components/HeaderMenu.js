@@ -43,7 +43,15 @@ class HeaderMenu extends Component {
 
     if(!formIsInvalid){
       const uuidv4 = require('uuid/v4');
-      this.props.onAddPost({...formValues, id: uuidv4(), timestamp: Date.now()})
+      this.props.onAddPost(
+        {
+          ...formValues,
+          id: uuidv4(),
+          timestamp: Date.now(),
+          voteScore: 1,
+      		deleted: false,
+      		commentCount: 0
+        })
       this.closeNewPostModal()
     }
 
