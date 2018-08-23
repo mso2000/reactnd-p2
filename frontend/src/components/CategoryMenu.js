@@ -9,12 +9,12 @@ class CategoryMenu extends Component {
   handleItemClick = (e, obj) => this.props.onChangeCategory(obj.name)
 
   componentDidUpdate(prevProps){
-    const { categories, matchedCategory, selectedCategory, history } = this.props
+    const { categories, matchedCategory, selectedCategory, onChangeCategory, history } = this.props
     if(prevProps.categories !== categories && selectedCategory !== matchedCategory) {
       const validCategoryFound = categories.find(c => c.path === matchedCategory)
 
       if (validCategoryFound){
-        this.props.onChangeCategory(matchedCategory)
+        onChangeCategory(matchedCategory)
       } else {
         history.push('/')
       }
@@ -37,8 +37,8 @@ class CategoryMenu extends Component {
   }
 }
 
-function mapStateToProps ({ categories }) {
-  return { categories }
+function mapStateToProps ({ categories, selectedCategory }) {
+  return { categories, selectedCategory }
 }
 
 export default connect(mapStateToProps)(CategoryMenu)

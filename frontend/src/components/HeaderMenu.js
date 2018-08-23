@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import { selectSortOrder } from '../actions'
 import { Grid, Menu, Header, Image, Button, Modal, Form } from 'semantic-ui-react'
 import serializeForm from 'form-serialize'
 
@@ -13,7 +14,8 @@ class HeaderMenu extends Component {
     body: ''
   }
 
-  handleItemClick = (e, obj) => this.props.onChangeOrder(obj.name)
+  handleMenuItemClick = (e, obj) => this.props.selectSortOrder(obj.name)
+  handleFormCategoryChange = (e, { value }) => this.setState({ category: value })
   openNewPostModal = () => this.setState(() => ({ newPostModalOpen: true }))
   closeNewPostModal = () => this.setState(() => ({
     newPostModalOpen: false,
@@ -23,10 +25,6 @@ class HeaderMenu extends Component {
     author: '',
     body: ''
   }))
-
-  handleChange = (e, { value }) => {
-    this.setState({ category: value })
-  }
 
   handleSubmit = (e) => {
     e.preventDefault()
@@ -83,8 +81,8 @@ class HeaderMenu extends Component {
           </Menu.Item>
           <Menu.Menu position='right'>
             <Menu.Item name='sort_by'><b>Ordenar por:</b></Menu.Item>
-            <Menu.Item name='timestamp' active={sortOrder === 'timestamp'} onClick={this.handleItemClick}>Data</Menu.Item>
-            <Menu.Item name='voteScore' active={sortOrder === 'voteScore'} onClick={this.handleItemClick}>Votos</Menu.Item>
+            <Menu.Item name='timestamp' active={sortOrder === 'timestamp'} onClick={this.handleMenuItemClick}>Data</Menu.Item>
+            <Menu.Item name='voteScore' active={sortOrder === 'voteScore'} onClick={this.handleMenuItemClick}>Votos</Menu.Item>
           </Menu.Menu>
           <Menu.Item name='new_post'>
             <Modal
@@ -112,9 +110,9 @@ class HeaderMenu extends Component {
                       <Form.TextArea name='body' label='Corpo' placeholder='Corpo' />
                     )}
                     { formIsInvalid && !category.length ? (
-                      <Form.Select error fluid label='Categoria' options={options} placeholder='Escolha uma categoria' onChange={ this.handleChange }/>
+                      <Form.Select error fluid label='Categoria' options={options} placeholder='Escolha uma categoria' onChange={ this.handleFormCategoryChange }/>
                     ) : (
-                      <Form.Select fluid label='Categoria' options={options} placeholder='Escolha uma categoria' onChange={ this.handleChange }/>
+                      <Form.Select fluid label='Categoria' options={options} placeholder='Escolha uma categoria' onChange={ this.handleFormCategoryChange }/>
                     )}
                     <Button primary>Criar</Button>
                   </Form>
@@ -129,8 +127,15 @@ class HeaderMenu extends Component {
 }
 
 
-function mapStateToProps ({ categories }) {
-  return { categories }
+function mapStateToProps ({ categories, sortOrder }) {
+  return { categories, sortOrder }
 }
 
-export default connect(mapStateToProps)(HeaderMenu)
+function mapDispatchToProps (dispatch) {
+  return {
+    selectSortOrder: (data) => dispatch(selectSortOrder(data))
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderMenu)

@@ -6,9 +6,7 @@ import sortBy from 'sort-by'
 
 class PostList extends Component {
   state = {}
-  handleButtonClick = (post) => {
-    this.props.onDeletePost(post)
-  }
+  handleButtonClick = (post) => this.props.onDeletePost(post)
 
   render() {
     const { posts, sortOrder, selectedCategory } = this.props
@@ -16,6 +14,9 @@ class PostList extends Component {
     ? posts.filter(p => p.hasOwnProperty('id'))
     : posts.filter(p => p.category === selectedCategory))
     .sort(sortBy('-' + sortOrder))
+    // TODO: Formatar adequadamente: timestamp, title, author, category, voteScore, commentCount
+    // TODO: Adicionar link para abrir view de detalhes
+    // TODO: Mover botão de deleção para detalhes da postagem
 
     return (
       <Grid.Column>
@@ -43,8 +44,8 @@ class PostList extends Component {
   }
 }
 
-function mapStateToProps ({ posts }) {
-  return { posts }
+function mapStateToProps ({ posts, selectedCategory, sortOrder }) {
+  return { posts, selectedCategory, sortOrder }
 }
 
 export default connect(mapStateToProps)(PostList)

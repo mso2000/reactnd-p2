@@ -2,6 +2,8 @@ import { combineReducers } from 'redux'
 
 import {
   ADD_CATEGORIES,
+  SELECT_CATEGORY,
+  SELECT_SORT_ORDER,
   ADD_POSTS,
   ADD_NEW_POST,
   DELETE_POST,
@@ -12,6 +14,24 @@ function categories (state = [], action) {
     case ADD_CATEGORIES :
       return action.categories
     default :
+      return state
+  }
+}
+
+function selectedCategory(state = 'all', action) {
+  switch (action.type) {
+    case SELECT_CATEGORY :
+      return action.category
+    default:
+      return state
+  }
+}
+
+function sortOrder(state = 'voteScore', action) {
+  switch (action.type) {
+    case SELECT_SORT_ORDER :
+      return action.sortOrder
+    default:
       return state
   }
 }
@@ -31,5 +51,7 @@ function posts (state = [], action) {
 
 export default combineReducers({
   categories,
+  selectedCategory,
+  sortOrder,
   posts,
 })
