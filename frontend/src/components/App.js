@@ -16,11 +16,11 @@ class App extends Component {
 
   changeCategory = (category) => {
     const { addCategories, addPosts } = this.props
-    console.log(category)
-    ServerAPI.getAllCategories().then(c => addCategories(c))
+    ServerAPI.getAllCategories()
+    .then(c => addCategories(c))
+    .catch(error => console.log(`Server error: ${error}.`))
     ServerAPI.getAllPosts().then(p => addPosts(p))
     this.setState({ selectedCategory: category })
-    // TODO: Tratar .catch()
   }
 
   changeOrder = (order) => {
@@ -31,23 +31,39 @@ class App extends Component {
     this.props.addNewPost(post)
     ServerAPI.addPost(post)
     .then(res => {
-      if(!res.hasOwnProperty('id'))
-        console.log('erro na inserção')
-        // TODO: Fazer Rollback
+      if(!res.hasOwnProperty('id')){
+        console.log('Insertion error. Rolling back changes...')
+        this.props.deletePost(post)
+      }
     })
-    // TODO: Tratar .catch()
+    .catch(error => {
+      console.log(`Server error: ${error}.\n\nRolling back changes...`)
+      this.props.deletePost(post)
+    })
+    // TODO: Ao criar um post, exibir view de detalhes do mesmo
   }
 
   deletePost = (post) => {
     this.props.deletePost(post)
+    ServerAPI.deletePost(post)
+    .then(res => {
+      if(res.hasOwnProperty('error')){
+        console.log('Delete error. Rolling back changes...')
+        this.props.addNewPost(post)
+      }
+    })
+    .catch(error => {
+      console.log(`Server error: ${error}.\n\nRolling back changes...`)
+      this.props.addNewPost(post)
+    })
   }
 
   componentDidMount(){
-    console.log('all')
     const { addCategories, addPosts } = this.props
-    ServerAPI.getAllCategories().then(c => addCategories(c))
+    ServerAPI.getAllCategories()
+    .then(c => addCategories(c))
+    .catch(error => console.log(`Server error: ${error}.`))
     ServerAPI.getAllPosts().then(p => addPosts(p))
-    // TODO: Tratar .catch()
   }
 
   render() {
