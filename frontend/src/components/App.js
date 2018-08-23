@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as ServerAPI from '../utils/ServerAPI'
 import { connect } from 'react-redux'
-import { addAllCategories, selectCategory, addAllPosts, addNewPost, deletePost } from '../actions'
+import { addNewPost, deletePost, fetchData } from '../actions'
 import HeaderMenu from './HeaderMenu'
 import CategoryMenu from './CategoryMenu'
 import PostList from './PostList'
@@ -10,15 +10,6 @@ import { Route, Redirect, Switch } from 'react-router-dom'
 
 class App extends Component {
   state = {}
-
-  changeCategory = (category) => {
-    const { addCategories, addPosts, selectCategory } = this.props
-    ServerAPI.getAllCategories()
-    .then(c => addCategories(c))
-    .catch(error => console.log(`Server error: ${error}.`))
-    ServerAPI.getAllPosts().then(p => addPosts(p))
-    selectCategory(category)
-  }
 
   addNewPost = (post) => {
     this.props.addNewPost(post)
@@ -52,11 +43,7 @@ class App extends Component {
   }
 
   componentDidMount(){
-    const { addCategories, addPosts } = this.props
-    ServerAPI.getAllCategories()
-    .then(c => addCategories(c))
-    .catch(error => console.log(`Server error: ${error}.`))
-    ServerAPI.getAllPosts().then(p => addPosts(p))
+    this.props.fetchData()
   }
 
   render() {
@@ -84,10 +71,8 @@ class App extends Component {
         <CategoryMenu
           matchedCategory = { matchedCategory }
           history = { props.history }
-          onChangeCategory = { this.changeCategory }
         />
-        <PostList onDeletePost = { this.deletePost }
-        />
+        <PostList onDeletePost = { this.deletePost } />
       </Grid.Row>
     )
   }
@@ -96,9 +81,7 @@ class App extends Component {
 
 function mapDispatchToProps (dispatch) {
   return {
-    addCategories: (data) => dispatch(addAllCategories(data)),
-    selectCategory: (data) => dispatch(selectCategory(data)),
-    addPosts: (data) => dispatch(addAllPosts(data)),
+    fetchData: () => dispatch(fetchData()),
     addNewPost: (data) => dispatch(addNewPost(data)),
     deletePost: (data) => dispatch(deletePost(data))
   }

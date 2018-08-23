@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import { changeCategory } from '../actions'
 import { Grid, Menu } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
 class CategoryMenu extends Component {
   state = { }
 
-  handleItemClick = (e, obj) => this.props.onChangeCategory(obj.name)
+  handleItemClick = (e, obj) => this.props.changeCategory(obj.name)
 
   componentDidUpdate(prevProps){
-    const { categories, matchedCategory, selectedCategory, onChangeCategory, history } = this.props
+    const { categories, matchedCategory, selectedCategory, changeCategory, history } = this.props
     if(prevProps.categories !== categories && selectedCategory !== matchedCategory) {
-      const validCategoryFound = categories.find(c => c.path === matchedCategory)
+      const validCategoryFound = matchedCategory ==='all' || categories.find(c => c.path === matchedCategory)
 
+      // TODO: Rever essa lógica que falha quando habilita o re-fetch
       if (validCategoryFound){
-        onChangeCategory(matchedCategory)
+        changeCategory(matchedCategory)
       } else {
         history.push('/')
       }
@@ -41,4 +43,10 @@ function mapStateToProps ({ categories, selectedCategory }) {
   return { categories, selectedCategory }
 }
 
-export default connect(mapStateToProps)(CategoryMenu)
+function mapDispatchToProps (dispatch) {
+  return {
+    changeCategory: (data) => dispatch(changeCategory(data)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryMenu)
