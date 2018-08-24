@@ -54,11 +54,14 @@ class App extends Component {
             onAddPost = { this.addNewPost }
           />
         </Grid.Row>
-        <Switch>
-          <Route exact path = '/' render = { this.doRoute } />
-          <Route exact path = '/:category' render = { this.doRoute } />
-          <Redirect to="/" />
-        </Switch>
+        <Grid.Row columns={2}>
+          <Switch>
+            <Route exact path = '/' component = { CategoryMenu } />
+            <Route exact path = '/:category' component = { CategoryMenu } />
+            <Redirect to="/" />
+          </Switch>
+          <PostList onDeletePost = { this.deletePost } />
+        </Grid.Row>
       </Grid>
     )
   }

@@ -5,23 +5,26 @@ import { Grid, Menu } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
 class CategoryMenu extends Component {
-  state = { }
+  state = { matchedCategory : 'all' }
 
   handleItemClick = (e, obj) => this.props.changeCategory(obj.name)
 
-  componentDidUpdate(prevProps){
-    const { categories, matchedCategory, selectedCategory, changeCategory, history } = this.props
-    if(prevProps.categories !== categories && selectedCategory !== matchedCategory) {
-      const validCategoryFound = matchedCategory ==='all' || categories.find(c => c.path === matchedCategory)
+  componentDidMount() {
+    const { changeCategory, match } = this.props
+    const matchedCategory = match.params.category ? match.params.category : 'all'
+    changeCategory(matchedCategory)
+  }
 
-      // TODO: Rever essa lógica que falha quando habilita o re-fetch
-      if (validCategoryFound){
-        changeCategory(matchedCategory)
-      } else {
+  componentDidUpdate(prevProps){
+    const { categories, match, history } = this.props
+    if(categories.length){
+      const matchedCategory = match.params.category ? match.params.category : 'all'
+      const validCategoryFound = matchedCategory === 'all' || categories.find(c => c.path === matchedCategory)
+      if(!validCategoryFound)
         history.push('/')
-      }
     }
   }
+
 
   render() {
     const { categories, selectedCategory } = this.props
