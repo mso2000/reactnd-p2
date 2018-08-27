@@ -1,18 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { removePost } from '../actions'
-import { Grid, Segment, Button, Icon, Menu } from 'semantic-ui-react'
+import { Grid, Segment, Button, Icon, Menu, Modal, Header } from 'semantic-ui-react'
 import { formatData } from '../utils/helpers'
 import sortBy from 'sort-by'
 
 class PostList extends Component {
-  state = {}
-  handleButtonClick = (post) => this.props.removePost(post)
-  // TODO: Confirmar deleção
-  // TODO: Verificar se componente pode ser stateless
+  state = {
+    modalOpen: false,
+    postToDelete: {}
+  }
+
+  openDeleteModal = (post) => this.setState(() => ({ modalOpen: true, postToDelete: post }))
+  closeDeleteModal = () => this.setState(() => ({ modalOpen: false, postToDelete: {} }))
+
+  handleModalAction = () => {
+    this.props.removePost(this.state.postToDelete)
+    this.closeDeleteModal()
+  }
+
 
   render() {
     const { posts, sortOrder, selectedCategory } = this.props
+    const { modalOpen } = this.state
+
     const sortedPosts = (selectedCategory === 'all'
     ? posts.filter(p => p.hasOwnProperty('id'))
     : posts.filter(p => p.category === selectedCategory))
@@ -30,7 +41,7 @@ class PostList extends Component {
             </Grid.Column>
             <Menu secondary>
               <Menu.Item name='post_menu' position='right'>
-                <Button animated='vertical' color='red' onClick={() => this.handleButtonClick(p)}>
+                <Button animated='vertical' color='red' onClick={ () => this.openDeleteModal(p) }>
                   <Button.Content hidden>Apagar</Button.Content>
                   <Button.Content visible>
                     <Icon name='trash' />
@@ -42,6 +53,26 @@ class PostList extends Component {
         )) : (
           <Segment style={{ padding: '2em' }}>Nenhum post encontrado.</Segment>
         )}
+
+        <Modal
+          open={ modalOpen }
+          onClose={ this.closeDeleteModal }
+        >
+          <Header icon='attention' content='Atenção!' />
+          <Modal.Content>
+            <h4>
+              Deseja apagar o post selecionado?
+            </h4>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button color='red' onClick={ this.closeDeleteModal }>
+              <Icon name='remove' /> Não
+            </Button>
+            <Button color='green' onClick={ this.handleModalAction }>
+              <Icon name='checkmark' /> Sim
+            </Button>
+          </Modal.Actions>
+        </Modal>
       </Grid.Column>
     )
   }

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import * as ServerAPI from '../utils/ServerAPI'
 import { connect } from 'react-redux'
 import { fetchData } from '../actions'
 import HeaderMenu from './HeaderMenu'
