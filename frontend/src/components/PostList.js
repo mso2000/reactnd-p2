@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { removePost } from '../actions'
-import { Grid, Segment, Button, Icon, Menu, Modal, Header } from 'semantic-ui-react'
+import { Grid, Segment, Button, Icon, Menu, Modal, Header, Label } from 'semantic-ui-react'
 import { formatData } from '../utils/helpers'
 import sortBy from 'sort-by'
 
@@ -28,8 +28,8 @@ class PostList extends Component {
     ? posts.filter(p => p.hasOwnProperty('id'))
     : posts.filter(p => p.category === selectedCategory))
     .sort(sortBy('-' + sortOrder))
-    // TODO: Formatar adequadamente: timestamp, title, author, category, voteScore, commentCount
     // TODO: Adicionar link para abrir view de detalhes
+    // TODO: Adicionar link para trocar categoria
     // TODO: Mover botão de deleção para detalhes da postagem
 
     return (
@@ -37,9 +37,18 @@ class PostList extends Component {
         {sortedPosts.length ? sortedPosts.map(p => (
           <Segment key={p.id} style={{ padding: '2em' }}>
             <Grid.Column>
-            [{formatData(p.timestamp)}] {p.title} ({p.voteScore})
+            <h1>{p.title}</h1>
+            Data: <b>{formatData(p.timestamp)}</b> - Autor: <b>{p.author}</b> - Categoria: <b>{p.category}</b>
             </Grid.Column>
             <Menu secondary>
+              <Menu.Item name='post_menu' position='left'>
+                <Label>
+                  <Icon name='thumbs up' /> {p.voteScore}
+                </Label>
+                <Label>
+                  <Icon name='comments' /> {p.commentCount}
+                </Label>
+              </Menu.Item>
               <Menu.Item name='post_menu' position='right'>
                 <Button animated='vertical' color='red' onClick={ () => this.openDeleteModal(p) }>
                   <Button.Content hidden>Apagar</Button.Content>
@@ -51,7 +60,7 @@ class PostList extends Component {
             </Menu>
           </Segment>
         )) : (
-          <Segment style={{ padding: '2em' }}>Nenhum post encontrado.</Segment>
+          <Segment style={{ padding: '2em' }}><h3>Nenhum post encontrado.</h3></Segment>
         )}
 
         <Modal
