@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { removePost } from '../actions'
+import { removePost, changeCategory } from '../actions'
 import { Grid, Segment, Button, Icon, Menu, Modal, Header, Label } from 'semantic-ui-react'
 import { formatData } from '../utils/helpers'
 import sortBy from 'sort-by'
@@ -10,6 +11,8 @@ class PostList extends Component {
     modalOpen: false,
     postToDelete: {}
   }
+
+  handleItemClick = (category) => this.props.changeCategory(category)
 
   openDeleteModal = (post) => this.setState(() => ({ modalOpen: true, postToDelete: post }))
   closeDeleteModal = () => this.setState(() => ({ modalOpen: false, postToDelete: {} }))
@@ -38,7 +41,15 @@ class PostList extends Component {
           <Segment key={p.id} style={{ padding: '2em' }}>
             <Grid.Column>
             <h1>{p.title}</h1>
-            Data: <b>{formatData(p.timestamp)}</b> - Autor: <b>{p.author}</b> - Categoria: <b>{p.category}</b>
+            Data: <b>{formatData(p.timestamp)}</b> -
+            Autor: <b>{p.author}</b> -
+            Categoria:
+              <Link
+                to={'/' + p.category}
+                onClick={() => this.handleItemClick(p.category)}
+              >
+                  <b> {p.category}</b>
+              </Link>
             </Grid.Column>
             <Menu secondary>
               <Menu.Item name='post_menu' position='left'>
@@ -93,6 +104,7 @@ function mapStateToProps ({ posts, selectedCategory, sortOrder }) {
 
 function mapDispatchToProps (dispatch) {
   return {
+    changeCategory: (data) => dispatch(changeCategory(data)),
     removePost: (data) => dispatch(removePost(data))
   }
 }
