@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import { removePost } from '../actions'
 import { Grid, Segment, Button, Icon, Menu } from 'semantic-ui-react'
 import { formatData } from '../utils/helpers'
 import sortBy from 'sort-by'
 
 class PostList extends Component {
   state = {}
-  handleButtonClick = (post) => this.props.onDeletePost(post)
+  handleButtonClick = (post) => this.props.removePost(post)
+  // TODO: Confirmar deleção
+  // TODO: Verificar se componente pode ser stateless
 
   render() {
     const { posts, sortOrder, selectedCategory } = this.props
@@ -48,4 +51,11 @@ function mapStateToProps ({ posts, selectedCategory, sortOrder }) {
   return { posts, selectedCategory, sortOrder }
 }
 
-export default connect(mapStateToProps)(PostList)
+function mapDispatchToProps (dispatch) {
+  return {
+    removePost: (data) => dispatch(removePost(data))
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostList)

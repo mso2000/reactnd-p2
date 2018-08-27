@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { selectSortOrder } from '../actions'
+import { addNewPost, selectSortOrder } from '../actions'
 import { Grid, Menu, Header, Image, Button, Modal, Form } from 'semantic-ui-react'
 import serializeForm from 'form-serialize'
 
@@ -41,7 +41,7 @@ class HeaderMenu extends Component {
 
     if(!formIsInvalid){
       const uuidv4 = require('uuid/v4');
-      this.props.onAddPost(
+      this.props.addNewPost(
         {
           ...formValues,
           id: uuidv4(),
@@ -51,6 +51,7 @@ class HeaderMenu extends Component {
       		commentCount: 0
         })
       this.closeNewPostModal()
+      // TODO: Ao criar um post, exibir view de detalhes do mesmo
     }
 
     this.setState({...formValues, formIsInvalid})
@@ -133,6 +134,7 @@ function mapStateToProps ({ categories, sortOrder }) {
 
 function mapDispatchToProps (dispatch) {
   return {
+    addNewPost: (data) => dispatch(addNewPost(data)),
     selectSortOrder: (data) => dispatch(selectSortOrder(data))
   }
 }

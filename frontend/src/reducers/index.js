@@ -5,9 +5,9 @@ import {
   CATEGORIES_ARE_LOADING,
   SELECT_CATEGORY,
   SELECT_SORT_ORDER,
-  ADD_POSTS,
+  ADD_ALL_POSTS,
   POSTS_ARE_LOADING,
-  ADD_NEW_POST,
+  ADD_POST,
   DELETE_POST,
 } from '../actions'
 
@@ -49,9 +49,9 @@ function sortOrder(state = 'voteScore', action) {
 
 function posts (state = [], action) {
   switch (action.type) {
-    case ADD_POSTS :
+    case ADD_ALL_POSTS :
       return action.posts
-    case ADD_NEW_POST :
+    case ADD_POST :
       return [...state, action.post]
     case DELETE_POST :
       return state.filter(p => p.id !== action.post.id)

@@ -4,9 +4,9 @@ export const ADD_CATEGORIES = 'ADD_CATEGORIES'
 export const CATEGORIES_ARE_LOADING = 'CATEGORIES_ARE_LOADING'
 export const SELECT_CATEGORY = 'SELECT_CATEGORY'
 export const SELECT_SORT_ORDER = 'SELECT_SORT_ORDER'
-export const ADD_POSTS = 'ADD_POSTS'
+export const ADD_ALL_POSTS = 'ADD_ALL_POSTS'
 export const POSTS_ARE_LOADING = 'POSTS_ARE_LOADING'
-export const ADD_NEW_POST = 'ADD_NEW_POST'
+export const ADD_POST = 'ADD_POST'
 export const DELETE_POST = 'DELETE_POST'
 
 export function fetchData() {
@@ -30,6 +30,42 @@ export function fetchData() {
       .catch(error => console.log(`Server error: ${error}.`))
     })
     .catch(error => console.log(`Server error: ${error}.`))
+  }
+}
+
+export function addNewPost(post) {
+  return (dispatch) => {
+    dispatch(addPost(post))
+
+    ServerAPI.addPost(post)
+    .then(res => {
+      if(!res.hasOwnProperty('id')){
+        console.log('Insertion error. Rolling back changes...')
+        dispatch(deletePost(post))
+      }
+    })
+    .catch(error => {
+      console.log(`Server error: ${error}.\n\nRolling back changes...`)
+      dispatch(deletePost(post))
+    })
+  }
+}
+
+export function removePost(post) {
+  return (dispatch) => {
+    dispatch(deletePost(post))
+
+    ServerAPI.deletePost(post)
+    .then(res => {
+      if(res.hasOwnProperty('error')){
+        console.log('Delete error. Rolling back changes...')
+        dispatch(addPost(post))
+      }
+    })
+    .catch(error => {
+      console.log(`Server error: ${error}.\n\nRolling back changes...`)
+      dispatch(addPost(post))
+    })
   }
 }
 
@@ -70,7 +106,7 @@ export function selectSortOrder (sortOrder) {
 
 export function addAllPosts (posts) {
   return {
-    type: ADD_POSTS,
+    type: ADD_ALL_POSTS,
     posts
   }
 }
@@ -82,9 +118,9 @@ export function postsAreLoading (isLoading) {
   }
 }
 
-export function addNewPost (post) {
+export function addPost (post) {
   return {
-    type: ADD_NEW_POST,
+    type: ADD_POST,
     post
   }
 }
