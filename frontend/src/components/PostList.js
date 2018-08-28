@@ -28,7 +28,6 @@ class PostList extends Component {
     ? posts.filter(p => p.hasOwnProperty('id'))
     : posts.filter(p => '/' + p.category === match.url))
     .sort(sortBy('-' + sortOrder))
-    // TODO: Adicionar link para abrir view de detalhes
     // TODO: Mover botão de deleção para detalhes da postagem
 
     return (
@@ -36,7 +35,9 @@ class PostList extends Component {
         {sortedPosts.length ? sortedPosts.map(p => (
           <Segment key={p.id} style={{ padding: '2em' }}>
             <Grid.Column>
-            <h1>{p.title}</h1>
+            <h1>
+              <Link to={`/${p.category}/${p.id}`}>{p.title}</Link>
+            </h1>
             Data: <b>{formatData(p.timestamp)}</b> -
             Autor: <b>{p.author}</b> -
             Categoria:

@@ -4,6 +4,7 @@ import { addNewPost, selectSortOrder } from '../actions'
 import { Grid, Menu, Header, Image, Button, Modal, Form } from 'semantic-ui-react'
 import serializeForm from 'form-serialize'
 
+
 class HeaderMenu extends Component {
   state = {
     newPostModalOpen: false,
@@ -16,6 +17,7 @@ class HeaderMenu extends Component {
 
   handleMenuItemClick = (e, obj) => this.props.selectSortOrder(obj.name)
   handleFormCategoryChange = (e, { value }) => this.setState({ category: value })
+  handleFormInputChange = (e, { name, value }) => this.setState({ [name]: value })
   openNewPostModal = () => this.setState(() => ({ newPostModalOpen: true }))
   closeNewPostModal = () => this.setState(() => ({
     newPostModalOpen: false,
@@ -41,17 +43,21 @@ class HeaderMenu extends Component {
 
     if(!formIsInvalid){
       const uuidv4 = require('uuid/v4');
-      this.props.addNewPost(
+      const id = uuidv4()
+      const {addNewPost, history} = this.props
+
+      addNewPost(
         {
           ...formValues,
-          id: uuidv4(),
+          id,
           timestamp: Date.now(),
           voteScore: 1,
       		deleted: false,
       		commentCount: 0
         })
+
       this.closeNewPostModal()
-      // TODO: Ao criar um post, exibir view de detalhes do mesmo
+      history.push(`/${formValues.category}/${id}`)
     }
 
     this.setState({...formValues, formIsInvalid})
@@ -90,23 +96,24 @@ class HeaderMenu extends Component {
               trigger={<Button primary onClick={ this.openNewPostModal }>Novo Post</Button>}
               open={ newPostModalOpen }
               onClose={ this.closeNewPostModal }
+              closeIcon
             >
-              <Modal.Header>Criar um novo post</Modal.Header>
+              <Header icon='archive' content='Criar um novo post' />
               <Modal.Content image>
                 <Modal.Description>
                   <Form onSubmit={this.handleSubmit}>
                     { formIsInvalid && !title.length ? (
-                      <Form.Input error name='title' label='Título' placeholder='title' />
+                      <Form.Input error name='title' label='Título' placeholder='title' onChange={this.handleFormInputChange} />
                     ) : (
                       <Form.Input name='title' label='Título' placeholder='title' />
                     )}
                     { formIsInvalid && !author.length ? (
-                      <Form.Input error name='author' label='Autor' placeholder='Autor' />
+                      <Form.Input error name='author' label='Autor' placeholder='Autor' onChange={this.handleFormInputChange} />
                     ) : (
                       <Form.Input name='author' label='Autor' placeholder='Autor' />
                     )}
                     { formIsInvalid && !body.length ? (
-                      <Form.TextArea error name='body' label='Corpo' placeholder='Corpo' />
+                      <Form.TextArea error name='body' label='Corpo' placeholder='Corpo' onChange={this.handleFormInputChange} />
                     ) : (
                       <Form.TextArea name='body' label='Corpo' placeholder='Corpo' />
                     )}
@@ -115,7 +122,7 @@ class HeaderMenu extends Component {
                     ) : (
                       <Form.Select fluid label='Categoria' options={options} placeholder='Escolha uma categoria' onChange={ this.handleFormCategoryChange }/>
                     )}
-                    <Button primary>Criar</Button>
+                    <Form.Button primary content='Criar' />
                   </Form>
                 </Modal.Description>
               </Modal.Content>
