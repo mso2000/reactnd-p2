@@ -2,7 +2,6 @@ import * as ServerAPI from '../utils/ServerAPI'
 
 export const ADD_CATEGORIES = 'ADD_CATEGORIES'
 export const CATEGORIES_ARE_LOADING = 'CATEGORIES_ARE_LOADING'
-export const SELECT_CATEGORY = 'SELECT_CATEGORY'
 export const SELECT_SORT_ORDER = 'SELECT_SORT_ORDER'
 export const ADD_ALL_POSTS = 'ADD_ALL_POSTS'
 export const POSTS_ARE_LOADING = 'POSTS_ARE_LOADING'
@@ -69,13 +68,6 @@ export function removePost(post) {
   }
 }
 
-export function changeCategory(category) {
-  return (dispatch, getState) => {
-    dispatch(selectCategory(category))
-    dispatch(fetchData())
-  }
-}
-
 export function addAllCategories (categories) {
   return {
     type: ADD_CATEGORIES,
@@ -87,13 +79,6 @@ export function categoriesAreLoading (isLoading) {
   return {
     type: CATEGORIES_ARE_LOADING,
     isLoading
-  }
-}
-
-export function selectCategory (category) {
-  return {
-    type: SELECT_CATEGORY,
-    category
   }
 }
 

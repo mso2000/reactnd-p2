@@ -3,7 +3,6 @@ import { combineReducers } from 'redux'
 import {
   ADD_CATEGORIES,
   CATEGORIES_ARE_LOADING,
-  SELECT_CATEGORY,
   SELECT_SORT_ORDER,
   ADD_ALL_POSTS,
   POSTS_ARE_LOADING,
@@ -25,15 +24,6 @@ function categoriesAreLoading (state = false, action) {
     case CATEGORIES_ARE_LOADING :
       return action.isLoading
     default :
-      return state
-  }
-}
-
-function selectedCategory(state = 'all', action) {
-  switch (action.type) {
-    case SELECT_CATEGORY :
-      return action.category
-    default:
       return state
   }
 }
@@ -72,7 +62,6 @@ function postsAreLoading (state = false, action) {
 export default combineReducers({
   categories,
   categoriesAreLoading,
-  selectedCategory,
   sortOrder,
   posts,
   postsAreLoading,

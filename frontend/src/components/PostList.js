@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { removePost, changeCategory } from '../actions'
+import { fetchData, removePost } from '../actions'
 import { Grid, Segment, Button, Icon, Menu, Modal, Header, Label } from 'semantic-ui-react'
 import { formatData } from '../utils/helpers'
 import sortBy from 'sort-by'
@@ -12,8 +12,6 @@ class PostList extends Component {
     postToDelete: {}
   }
 
-  handleItemClick = (category) => this.props.changeCategory(category)
-
   openDeleteModal = (post) => this.setState(() => ({ modalOpen: true, postToDelete: post }))
   closeDeleteModal = () => this.setState(() => ({ modalOpen: false, postToDelete: {} }))
 
@@ -22,17 +20,15 @@ class PostList extends Component {
     this.closeDeleteModal()
   }
 
-
   render() {
-    const { posts, sortOrder, selectedCategory } = this.props
+    const { posts, sortOrder, match, fetchData } = this.props
     const { modalOpen } = this.state
 
-    const sortedPosts = (selectedCategory === 'all'
+    const sortedPosts = (match.url === '/'
     ? posts.filter(p => p.hasOwnProperty('id'))
-    : posts.filter(p => p.category === selectedCategory))
+    : posts.filter(p => '/' + p.category === match.url))
     .sort(sortBy('-' + sortOrder))
     // TODO: Adicionar link para abrir view de detalhes
-    // TODO: Adicionar link para trocar categoria
     // TODO: Mover botão de deleção para detalhes da postagem
 
     return (
@@ -44,11 +40,8 @@ class PostList extends Component {
             Data: <b>{formatData(p.timestamp)}</b> -
             Autor: <b>{p.author}</b> -
             Categoria:
-              <Link
-                to={'/' + p.category}
-                onClick={() => this.handleItemClick(p.category)}
-              >
-                  <b> {p.category}</b>
+              <Link to={'/' + p.category} onClick={fetchData}>
+                <b> {p.category}</b>
               </Link>
             </Grid.Column>
             <Menu secondary>
@@ -98,16 +91,15 @@ class PostList extends Component {
   }
 }
 
-function mapStateToProps ({ posts, selectedCategory, sortOrder }) {
-  return { posts, selectedCategory, sortOrder }
+function mapStateToProps ({ posts, sortOrder }) {
+  return { posts, sortOrder }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    changeCategory: (data) => dispatch(changeCategory(data)),
+    fetchData: () => dispatch(fetchData()),
     removePost: (data) => dispatch(removePost(data))
   }
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(PostList)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PostList))
