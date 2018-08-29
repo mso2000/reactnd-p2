@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { addNewPost, selectSortOrder } from '../actions'
-import { Grid, Menu, Header, Image, Button, Modal, Form } from 'semantic-ui-react'
+import { Grid, Menu, Header, Image, Button, Modal, Form, Divider } from 'semantic-ui-react'
 import serializeForm from 'form-serialize'
 
 
@@ -122,7 +122,8 @@ class HeaderMenu extends Component {
                     ) : (
                       <Form.Select fluid label='Categoria' options={options} placeholder='Escolha uma categoria' onChange={ this.handleFormCategoryChange }/>
                     )}
-                    <Form.Button primary content='Publicar' labelPosition='left' icon='edit' />
+                    <Divider />
+                    <Form.Button primary floated='right' content='Publicar' labelPosition='left' icon='edit' />
                   </Form>
                 </Modal.Description>
               </Modal.Content>

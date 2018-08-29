@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchData, removePost } from '../actions'
-import { Grid, Segment, Button, Icon, Menu, Modal, Header, Label } from 'semantic-ui-react'
+import { Grid, Segment, Button, Icon, Menu, Modal, Header, Label, Divider } from 'semantic-ui-react'
 import { formatData } from '../utils/helpers'
 import sortBy from 'sort-by'
 
@@ -55,14 +55,34 @@ class PostList extends Component {
                   <Icon name='comments' /> {p.commentCount}
                 </Label>
               </Menu.Item>
-              <Menu.Item name='post_menu' position='right'>
+              <Button.Group size='mini' floated='right'>
+                <Button animated='vertical'>
+                  <Button.Content hidden>+1</Button.Content>
+                  <Button.Content visible>
+                    <Icon name='thumbs up' />
+                  </Button.Content>
+                </Button>
+                <Button animated='vertical'>
+                  <Button.Content hidden>-1</Button.Content>
+                  <Button.Content visible>
+                    <Icon name='thumbs down' />
+                  </Button.Content>
+                </Button>
+              </Button.Group>&nbsp;&nbsp;
+              <Button.Group size='mini' floated='right'>
+                <Button animated='vertical' color='green'>
+                  <Button.Content hidden>Editar</Button.Content>
+                  <Button.Content visible>
+                    <Icon name='edit' />
+                  </Button.Content>
+                </Button>
                 <Button animated='vertical' color='red' onClick={ () => this.openDeleteModal(p) }>
                   <Button.Content hidden>Apagar</Button.Content>
                   <Button.Content visible>
                     <Icon name='trash' />
                   </Button.Content>
                 </Button>
-              </Menu.Item>
+              </Button.Group>
             </Menu>
           </Segment>
         )) : (

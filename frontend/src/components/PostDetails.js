@@ -10,6 +10,7 @@ class PostDetails extends Component {
 
   render() {
     const { match } = this.props
+    // TODO: Criar componente para exibir os principais dados do post e reusá-lo com PostList
 
     return (
       <Grid.Column>
@@ -21,6 +22,9 @@ class PostDetails extends Component {
           <Link to={'/' + match.params.category} onClick={fetchData}>
             <b> {match.params.category}</b>
           </Link>
+          <Segment style={{ padding: '2em' }}>
+            Pellentesque habitant morbi tristique senectus.
+          </Segment>
           <Menu secondary>
             <Menu.Item name='post_menu' position='left'>
               <Label>
@@ -30,6 +34,34 @@ class PostDetails extends Component {
                 <Icon name='comments' /> {`2`}
               </Label>
             </Menu.Item>
+            <Button.Group size='mini' floated='right'>
+              <Button animated='vertical'>
+                <Button.Content hidden>+1</Button.Content>
+                <Button.Content visible>
+                  <Icon name='thumbs up' />
+                </Button.Content>
+              </Button>
+              <Button animated='vertical'>
+                <Button.Content hidden>-1</Button.Content>
+                <Button.Content visible>
+                  <Icon name='thumbs down' />
+                </Button.Content>
+              </Button>
+            </Button.Group>&nbsp;&nbsp;
+            <Button.Group size='mini' floated='right'>
+              <Button animated='vertical' color='green'>
+                <Button.Content hidden>Editar</Button.Content>
+                <Button.Content visible>
+                  <Icon name='edit' />
+                </Button.Content>
+              </Button>
+              <Button animated='vertical' color='red'>
+                <Button.Content hidden>Apagar</Button.Content>
+                <Button.Content visible>
+                  <Icon name='trash' />
+                </Button.Content>
+              </Button>
+            </Button.Group>&nbsp;&nbsp;
           </Menu>
 
           <Comment.Group>
@@ -47,7 +79,18 @@ class PostDetails extends Component {
                 </Comment.Metadata>
                 <Comment.Text>How artistic!</Comment.Text>
                 <Comment.Actions>
+                  <Label size='mini'>
+                    <Icon name='thumbs up' /> {`2`}
+                  </Label>
+                  &nbsp;
+                  <Comment.Action>&#9650;</Comment.Action>
+                  <Comment.Action>&#9660;</Comment.Action>
+                  &#8226;&nbsp;&nbsp;
                   <Comment.Action>Responder</Comment.Action>
+                  &#8226;&nbsp;&nbsp;&nbsp;
+                  <Comment.Action>Editar</Comment.Action>
+                  &#8226;&nbsp;&nbsp;&nbsp;
+                  <Comment.Action>Apagar</Comment.Action>
                 </Comment.Actions>
               </Comment.Content>
             </Comment>
@@ -61,7 +104,18 @@ class PostDetails extends Component {
                 </Comment.Metadata>
                 <Comment.Text>Dude, this is awesome. Thanks so much</Comment.Text>
                 <Comment.Actions>
+                  <Label size='mini'>
+                    <Icon name='thumbs up' /> {`5`}
+                  </Label>
+                  &nbsp;
+                  <Comment.Action>&#9650;</Comment.Action>
+                  <Comment.Action>&#9660;</Comment.Action>
+                  &#8226;&nbsp;&nbsp;&nbsp;
                   <Comment.Action>Responder</Comment.Action>
+                  &#8226;&nbsp;&nbsp;&nbsp;
+                  <Comment.Action>Editar</Comment.Action>
+                  &#8226;&nbsp;&nbsp;&nbsp;
+                  <Comment.Action>Apagar</Comment.Action>
                 </Comment.Actions>
               </Comment.Content>
             </Comment>
