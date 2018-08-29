@@ -93,7 +93,7 @@ class HeaderMenu extends Component {
           </Menu.Menu>
           <Menu.Item name='new_post'>
             <Modal
-              trigger={<Button primary onClick={ this.openNewPostModal }>Novo Post</Button>}
+              trigger={<Button content='Novo Post' labelPosition='left' icon='edit' primary onClick={ this.openNewPostModal } />}
               open={ newPostModalOpen }
               onClose={ this.closeNewPostModal }
               closeIcon
@@ -122,7 +122,7 @@ class HeaderMenu extends Component {
                     ) : (
                       <Form.Select fluid label='Categoria' options={options} placeholder='Escolha uma categoria' onChange={ this.handleFormCategoryChange }/>
                     )}
-                    <Form.Button primary content='Criar' />
+                    <Form.Button primary content='Publicar' labelPosition='left' icon='edit' />
                   </Form>
                 </Modal.Description>
               </Modal.Content>

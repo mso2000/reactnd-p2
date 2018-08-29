@@ -29,18 +29,19 @@ class PostList extends Component {
     : posts.filter(p => '/' + p.category === match.url))
     .sort(sortBy('-' + sortOrder))
     // TODO: Mover botão de deleção para detalhes da postagem
+    // TODO: Adicionar botões de voto e edição do post
 
     return (
       <Grid.Column>
         {sortedPosts.length ? sortedPosts.map(p => (
           <Segment key={p.id} style={{ padding: '2em' }}>
             <Grid.Column>
-            <h1>
-              <Link to={`/${p.category}/${p.id}`}>{p.title}</Link>
-            </h1>
-            Data: <b>{formatData(p.timestamp)}</b> -
-            Autor: <b>{p.author}</b> -
-            Categoria:
+              <h1>
+                <Link to={`/${p.category}/${p.id}`}>{p.title}</Link>
+              </h1>
+              Data: <b>{formatData(p.timestamp)}</b> -
+              Autor: <b>{p.author}</b> -
+              Categoria:
               <Link to={'/' + p.category} onClick={fetchData}>
                 <b> {p.category}</b>
               </Link>
