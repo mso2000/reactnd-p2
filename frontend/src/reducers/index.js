@@ -8,6 +8,7 @@ import {
   POSTS_ARE_LOADING,
   ADD_POST,
   DELETE_POST,
+  UPDATE_POST,
 } from '../actions'
 
 function categories (state = [], action) {
@@ -45,6 +46,8 @@ function posts (state = [], action) {
       return [...state, action.post]
     case DELETE_POST :
       return state.filter(p => p.id !== action.post.id)
+    case UPDATE_POST :
+      return [...state.filter(p => p.id !== action.post.id), action.post]
     default :
       return state
   }

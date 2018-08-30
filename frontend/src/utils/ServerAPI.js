@@ -33,8 +33,8 @@ export const deletePost = (post) =>
   fetch(`${api}/posts/${post.id}`, { method: 'DELETE', headers })
     .then(res => res.json())
 
-export const votePost = (postId, option) =>
-  fetch(`${api}/posts/${postId}`, {
+export const votePost = (post, option) =>
+  fetch(`${api}/posts/${post.id}`, {
     method: 'POST',
     headers: {
       ...headers,

@@ -7,6 +7,7 @@ export const ADD_ALL_POSTS = 'ADD_ALL_POSTS'
 export const POSTS_ARE_LOADING = 'POSTS_ARE_LOADING'
 export const ADD_POST = 'ADD_POST'
 export const DELETE_POST = 'DELETE_POST'
+export const UPDATE_POST = 'UPDATE_POST'
 
 export function fetchData() {
   return (dispatch, getState) => {
@@ -68,6 +69,24 @@ export function removePost(post) {
   }
 }
 
+export function votePost(post, option) {
+  return (dispatch) => {
+    dispatch(updatePostVoteScore(post, option))
+
+    ServerAPI.votePost(post, option)
+    .then(res => {
+      if(res.hasOwnProperty('error')){
+        console.log('Vote error. Rolling back changes...')
+        dispatch(resetPost(post))
+      }
+    })
+    .catch(error => {
+      console.log(`Server error: ${error}.\n\nRolling back changes...`)
+      dispatch(resetPost(post))
+    })
+  }
+}
+
 export function addAllCategories (categories) {
   return {
     type: ADD_CATEGORIES,
@@ -114,5 +133,22 @@ export function deletePost (post) {
   return {
     type: DELETE_POST,
     post
+  }
+}
+
+export function resetPost(post) {
+  return {
+    type: UPDATE_POST,
+    post
+  }
+}
+
+export function updatePostVoteScore(post, option) {
+  return {
+    type: UPDATE_POST,
+    post: {
+      ...post,
+      voteScore: option === 'upVote' ? post.voteScore + 1 : post.voteScore - 1
+    }
   }
 }

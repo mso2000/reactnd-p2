@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { fetchData, removePost } from '../actions'
+import { fetchData, removePost, votePost } from '../actions'
 import { Grid, Segment, Button, Icon, Menu, Modal, Header, Label } from 'semantic-ui-react'
 import { formatData } from '../utils/helpers'
 import sortBy from 'sort-by'
-
-import * as ServerAPI from '../utils/ServerAPI'
 
 class PostList extends Component {
   state = {
@@ -23,7 +21,7 @@ class PostList extends Component {
   }
 
   render() {
-    const { posts, sortOrder, match, fetchData } = this.props
+    const { posts, sortOrder, match, fetchData, votePost } = this.props
     const { modalOpen } = this.state
 
     const sortedPosts = (match.url === '/'
@@ -58,13 +56,13 @@ class PostList extends Component {
                 </Label>
               </Menu.Item>
               <Button.Group size='mini' floated='right'>
-                <Button animated='vertical' onClick={ () => ServerAPI.votePost(p.id, 'upVote').then(res => console.log(res))}>
+                <Button animated='vertical' onClick={ () => votePost(p, 'upVote') }>
                   <Button.Content hidden>+1</Button.Content>
                   <Button.Content visible>
                     <Icon name='thumbs up' />
                   </Button.Content>
                 </Button>
-                <Button animated='vertical' onClick={ () => ServerAPI.votePost(p.id, 'downVote').then(res => console.log(res))}>
+                <Button animated='vertical' onClick={ () => votePost(p, 'downVote') }>
                   <Button.Content hidden>-1</Button.Content>
                   <Button.Content visible>
                     <Icon name='thumbs down' />
@@ -122,7 +120,8 @@ function mapStateToProps ({ posts, sortOrder }) {
 function mapDispatchToProps (dispatch) {
   return {
     fetchData: () => dispatch(fetchData()),
-    removePost: (data) => dispatch(removePost(data))
+    removePost: (data) => dispatch(removePost(data)),
+    votePost: (post, option) => dispatch(votePost(post, option))
   }
 }
 
