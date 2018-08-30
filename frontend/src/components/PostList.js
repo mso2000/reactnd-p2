@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchData, removePost } from '../actions'
-import { Grid, Segment, Button, Icon, Menu, Modal, Header, Label, Divider } from 'semantic-ui-react'
+import { Grid, Segment, Button, Icon, Menu, Modal, Header, Label } from 'semantic-ui-react'
 import { formatData } from '../utils/helpers'
 import sortBy from 'sort-by'
+
+import * as ServerAPI from '../utils/ServerAPI'
 
 class PostList extends Component {
   state = {
@@ -56,13 +58,13 @@ class PostList extends Component {
                 </Label>
               </Menu.Item>
               <Button.Group size='mini' floated='right'>
-                <Button animated='vertical'>
+                <Button animated='vertical' onClick={ () => ServerAPI.votePost(p.id, 'upVote').then(res => console.log(res))}>
                   <Button.Content hidden>+1</Button.Content>
                   <Button.Content visible>
                     <Icon name='thumbs up' />
                   </Button.Content>
                 </Button>
-                <Button animated='vertical'>
+                <Button animated='vertical' onClick={ () => ServerAPI.votePost(p.id, 'downVote').then(res => console.log(res))}>
                   <Button.Content hidden>-1</Button.Content>
                   <Button.Content visible>
                     <Icon name='thumbs down' />
