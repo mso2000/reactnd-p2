@@ -1,34 +1,40 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { fetchData, removePost, votePost } from '../actions'
+import { fetchData, removePost, updatePost, votePost } from '../actions'
 import { Grid, Segment, Button, Icon, Menu, Modal, Header, Label } from 'semantic-ui-react'
+import PostEdit from './PostEdit'
 import { formatData } from '../utils/helpers'
 import sortBy from 'sort-by'
 
 class PostList extends Component {
   state = {
-    modalOpen: false,
-    postToDelete: {}
+    editModalOpen: false,
+    deleteModalOpen: false,
+    selectedPost: {}
   }
 
-  openDeleteModal = (post) => this.setState(() => ({ modalOpen: true, postToDelete: post }))
-  closeDeleteModal = () => this.setState(() => ({ modalOpen: false, postToDelete: {} }))
+  openEditPostModal = (post) => this.setState(() => ({ editModalOpen: true, selectedPost: post }))
+  closeEditPostModal = () => this.setState(() => ({ editModalOpen: false, selectedPost: {} }))
+
+  openDeleteModal = (post) => this.setState(() => ({ deleteModalOpen: true, selectedPost: post }))
+  closeDeleteModal = () => this.setState(() => ({ deleteModalOpen: false, selectedPost: {} }))
+
+  updatePost = (newPost) => this.props.updatePost(this.state.selectedPost, newPost)
 
   handleModalAction = () => {
-    this.props.removePost(this.state.postToDelete)
+    this.props.removePost(this.state.selectedPost)
     this.closeDeleteModal()
   }
 
   render() {
     const { posts, sortOrder, match, fetchData, votePost } = this.props
-    const { modalOpen } = this.state
+    const { editModalOpen, deleteModalOpen, selectedPost } = this.state
 
     const sortedPosts = (match.url === '/'
     ? posts.filter(p => p.hasOwnProperty('id'))
     : posts.filter(p => '/' + p.category === match.url))
     .sort(sortBy('-' + sortOrder))
-    // TODO: Invocar PostEdit em modo de edição
 
     return (
       <Grid.Column>
@@ -69,7 +75,7 @@ class PostList extends Component {
                 </Button>
               </Button.Group>&nbsp;&nbsp;
               <Button.Group size='mini' floated='right'>
-                <Button animated='vertical' color='green'>
+                <Button animated='vertical' color='green' onClick={ () => this.openEditPostModal(p) }>
                   <Button.Content hidden>Editar</Button.Content>
                   <Button.Content visible>
                     <Icon name='edit' />
@@ -88,8 +94,16 @@ class PostList extends Component {
           <Segment style={{ padding: '2em' }}><h3>Nenhum post encontrado.</h3></Segment>
         )}
 
+        <PostEdit
+          modalOpen={ editModalOpen }
+          onCloseModal={ this.closeEditPostModal }
+          isNewPost={ false }
+          post={ selectedPost }
+          onChangePost={ this.updatePost }
+        />
+
         <Modal
-          open={ modalOpen }
+          open={ deleteModalOpen }
           onClose={ this.closeDeleteModal }
         >
           <Header icon='attention' content='Atenção!' />
@@ -120,6 +134,7 @@ function mapDispatchToProps (dispatch) {
   return {
     fetchData: () => dispatch(fetchData()),
     removePost: (data) => dispatch(removePost(data)),
+    updatePost: (oldPost, newPost) => dispatch(updatePost(oldPost, newPost)),
     votePost: (post, option) => dispatch(votePost(post, option))
   }
 }

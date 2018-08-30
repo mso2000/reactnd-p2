@@ -33,7 +33,9 @@ class HeaderMenu extends Component {
             <PostEdit
               modalOpen={ newPostModalOpen }
               onCloseModal={ this.closeNewPostModal }
-              onAddPost={addNewPost}
+              isNewPost={ true }
+              post={ null }
+              onChangePost={addNewPost}
             />
           </Menu.Item>
         </Menu>

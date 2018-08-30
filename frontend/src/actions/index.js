@@ -51,6 +51,24 @@ export function addNewPost(post) {
   }
 }
 
+export function updatePost(oldPost, newPost) {
+  return (dispatch) => {
+    dispatch(resetPost(newPost))
+
+    ServerAPI.editPost(newPost)
+    .then(res => {
+      if(res.hasOwnProperty('error')){
+        console.log('Edit error. Rolling back changes...')
+        dispatch(resetPost(oldPost))
+      }
+    })
+    .catch(error => {
+      console.log(`Edit error: ${error}.\n\nRolling back changes...`)
+      dispatch(resetPost(oldPost))
+    })
+  }
+}
+
 export function removePost(post) {
   return (dispatch) => {
     dispatch(deletePost(post))
