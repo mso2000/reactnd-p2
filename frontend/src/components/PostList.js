@@ -28,8 +28,7 @@ class PostList extends Component {
     ? posts.filter(p => p.hasOwnProperty('id'))
     : posts.filter(p => '/' + p.category === match.url))
     .sort(sortBy('-' + sortOrder))
-    // TODO: Mover botão de deleção para detalhes da postagem
-    // TODO: Adicionar botões de voto e edição do post
+    // TODO: Invocar PostEdit em modo de edição
 
     return (
       <Grid.Column>

@@ -1,82 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { addNewPost, selectSortOrder } from '../actions'
-import { Grid, Menu, Header, Image, Button, Modal, Form, Divider } from 'semantic-ui-react'
-import serializeForm from 'form-serialize'
-
+import PostEdit from './PostEdit'
+import { Grid, Menu, Header, Image, Button } from 'semantic-ui-react'
 
 class HeaderMenu extends Component {
-  state = {
-    newPostModalOpen: false,
-    formIsInvalid: false,
-    category: '',
-    title: '',
-    author: '',
-    body: ''
-  }
+  state = { newPostModalOpen: false }
 
   handleMenuItemClick = (e, obj) => this.props.selectSortOrder(obj.name)
-  handleFormCategoryChange = (e, { value }) => this.setState({ category: value })
-  handleFormInputChange = (e, { name, value }) => this.setState({ [name]: value })
   openNewPostModal = () => this.setState(() => ({ newPostModalOpen: true }))
-  closeNewPostModal = () => this.setState(() => ({
-    newPostModalOpen: false,
-    formIsInvalid: false,
-    category: '',
-    title: '',
-    author: '',
-    body: ''
-  }))
-
-  handleSubmit = (e) => {
-    e.preventDefault()
-    const formValues = serializeForm(e.target, { hash: true })
-    formValues.category = this.state.category
-    formValues.title = formValues.hasOwnProperty('title') ? formValues.title : ''
-    formValues.author = formValues.hasOwnProperty('author') ? formValues.author : ''
-    formValues.body = formValues.hasOwnProperty('body') ? formValues.body : ''
-
-    const formIsInvalid = !(formValues.title.length
-      && formValues.author.length
-      && formValues.body.length
-      && formValues.category.length)
-
-    if(!formIsInvalid){
-      const uuidv4 = require('uuid/v4');
-      const id = uuidv4()
-      const {addNewPost, history} = this.props
-
-      addNewPost(
-        {
-          ...formValues,
-          id,
-          timestamp: Date.now(),
-          voteScore: 1,
-      		deleted: false,
-      		commentCount: 0
-        })
-
-      this.closeNewPostModal()
-      history.push(`/${formValues.category}/${id}`)
-    }
-
-    this.setState({...formValues, formIsInvalid})
-  }
-
+  closeNewPostModal = () => this.setState(() => ({ newPostModalOpen: false }))
 
   render() {
-    const { categories, sortOrder } = this.props
-    const { newPostModalOpen, formIsInvalid, category, title, author, body } = this.state
-
-    const options = categories.reduce((accumulator, currentValue) => {
-      accumulator.push(
-        {
-          key: currentValue.path,
-          text: currentValue.name,
-          value: currentValue.path
-        })
-      return accumulator
-    }, [])
+    const { sortOrder, addNewPost } = this.props
+    const { newPostModalOpen } = this.state
 
     return (
       <Grid.Column>
@@ -92,42 +29,12 @@ class HeaderMenu extends Component {
             <Menu.Item name='voteScore' active={sortOrder === 'voteScore'} onClick={this.handleMenuItemClick}>Votos</Menu.Item>
           </Menu.Menu>
           <Menu.Item name='new_post'>
-            <Modal
-              trigger={<Button content='Novo Post' labelPosition='left' icon='edit' primary onClick={ this.openNewPostModal } />}
-              open={ newPostModalOpen }
-              onClose={ this.closeNewPostModal }
-              closeIcon
-            >
-              <Header icon='archive' content='Criar um novo post' />
-              <Modal.Content image>
-                <Modal.Description>
-                  <Form onSubmit={this.handleSubmit}>
-                    { formIsInvalid && !title.length ? (
-                      <Form.Input error name='title' label='Título' placeholder='title' onChange={this.handleFormInputChange} />
-                    ) : (
-                      <Form.Input name='title' label='Título' placeholder='title' />
-                    )}
-                    { formIsInvalid && !author.length ? (
-                      <Form.Input error name='author' label='Autor' placeholder='Autor' onChange={this.handleFormInputChange} />
-                    ) : (
-                      <Form.Input name='author' label='Autor' placeholder='Autor' />
-                    )}
-                    { formIsInvalid && !body.length ? (
-                      <Form.TextArea error name='body' label='Corpo' placeholder='Corpo' onChange={this.handleFormInputChange} />
-                    ) : (
-                      <Form.TextArea name='body' label='Corpo' placeholder='Corpo' />
-                    )}
-                    { formIsInvalid && !category.length ? (
-                      <Form.Select error fluid label='Categoria' options={options} placeholder='Escolha uma categoria' onChange={ this.handleFormCategoryChange }/>
-                    ) : (
-                      <Form.Select fluid label='Categoria' options={options} placeholder='Escolha uma categoria' onChange={ this.handleFormCategoryChange }/>
-                    )}
-                    <Divider />
-                    <Form.Button primary floated='right' content='Publicar' labelPosition='left' icon='edit' />
-                  </Form>
-                </Modal.Description>
-              </Modal.Content>
-            </Modal>
+            <Button content='Novo Post' labelPosition='left' icon='edit' primary onClick={ this.openNewPostModal } />
+            <PostEdit
+              modalOpen={ newPostModalOpen }
+              onCloseModal={ this.closeNewPostModal }
+              onAddPost={addNewPost}
+            />
           </Menu.Item>
         </Menu>
       </Grid.Column>
@@ -136,8 +43,8 @@ class HeaderMenu extends Component {
 }
 
 
-function mapStateToProps ({ categories, sortOrder }) {
-  return { categories, sortOrder }
+function mapStateToProps ({ sortOrder }) {
+  return { sortOrder }
 }
 
 function mapDispatchToProps (dispatch) {
@@ -146,6 +53,5 @@ function mapDispatchToProps (dispatch) {
     selectSortOrder: (data) => dispatch(selectSortOrder(data))
   }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderMenu)
