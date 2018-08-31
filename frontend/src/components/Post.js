@@ -54,9 +54,11 @@ class Post extends Component {
             <Label>
               <Icon name='thumbs up' /> {selectedPost.voteScore}
             </Label>
-            <Label>
-              <Icon name='comments' /> {selectedPost.commentCount}
-            </Label>
+            { !showDetails && (
+              <Label>
+                <Icon name='comments' /> {selectedPost.commentCount}
+              </Label>
+            )}
           </Menu.Item>
           <Button.Group size='mini' floated='right'>
             <Button animated='vertical' onClick={ () => votePost(selectedPost, 'upVote') }>

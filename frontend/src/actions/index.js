@@ -8,6 +8,9 @@ export const POSTS_ARE_LOADING = 'POSTS_ARE_LOADING'
 export const ADD_POST = 'ADD_POST'
 export const DELETE_POST = 'DELETE_POST'
 export const UPDATE_POST = 'UPDATE_POST'
+export const ADD_ALL_POST_COMMENTS = 'ADD_ALL_POST_COMMENTS'
+export const COMMENTS_ARE_LOADING = 'COMMENTS_ARE_LOADING'
+
 
 export function fetchData() {
   return (dispatch, getState) => {
@@ -168,5 +171,34 @@ export function updatePostVoteScore(post, option) {
       ...post,
       voteScore: option === 'upVote' ? post.voteScore + 1 : post.voteScore - 1
     }
+  }
+}
+
+export function fetchPostComments(post) {
+  return (dispatch, getState) => {
+    if(getState().commentsAreLoading) return
+    dispatch(commentsAreLoading(true))
+
+    ServerAPI.getComments(post)
+    .then(comments => {
+      dispatch(addAllPostComments(post, comments))
+      dispatch(commentsAreLoading(false))
+    })
+    .catch(error => console.log(`Server error: ${error}.`))
+  }
+}
+
+export function commentsAreLoading (isLoading) {
+  return {
+    type: COMMENTS_ARE_LOADING,
+    isLoading
+  }
+}
+
+export function addAllPostComments(post, comments) {
+  return {
+    type: ADD_ALL_POST_COMMENTS,
+    post,
+    comments
   }
 }

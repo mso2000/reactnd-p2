@@ -9,6 +9,8 @@ import {
   ADD_POST,
   DELETE_POST,
   UPDATE_POST,
+  ADD_ALL_POST_COMMENTS,
+  COMMENTS_ARE_LOADING,
 } from '../actions'
 
 function categories (state = [], action) {
@@ -62,10 +64,30 @@ function postsAreLoading (state = false, action) {
   }
 }
 
+function comments (state = [], action) {
+  switch (action.type) {
+    case ADD_ALL_POST_COMMENTS:
+      return [...state.filter(p => p.parentId !== action.post.id), ...action.comments]
+    default :
+      return state
+  }
+}
+
+function commentsAreLoading (state = false, action) {
+  switch (action.type) {
+    case COMMENTS_ARE_LOADING :
+      return action.isLoading
+    default :
+      return state
+  }
+}
+
 export default combineReducers({
   categories,
   categoriesAreLoading,
   sortOrder,
   posts,
   postsAreLoading,
+  comments,
+  commentsAreLoading
 })
