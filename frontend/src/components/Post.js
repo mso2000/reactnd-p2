@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchData, removePost, updatePost, votePost } from '../actions'
-import { Grid, Button, Segment, Icon, Menu, Modal, Header, Label } from 'semantic-ui-react'
+import { Grid, Button, Segment, Icon, Menu, Label } from 'semantic-ui-react'
 import PostEdit from './PostEdit'
+import DeletionModal from './DeletionModal'
 import { formatData } from '../utils/helpers'
 
 class Post extends Component {
@@ -24,10 +25,11 @@ class Post extends Component {
   }
 
   handleDeleteModalAction = () => {
-    const { removePost, selectedPost, history} = this.props
+    const { removePost, selectedPost, history, match } = this.props
     removePost(selectedPost)
     this.closeDeleteModal()
-    history.push(`/${selectedPost.category}`)
+    history.push(match.params.hasOwnProperty('category') ?
+      `/${match.params.category}` : '/')
   }
 
   render() {
@@ -101,25 +103,12 @@ class Post extends Component {
           onChangePost={ this.updatePost }
         />
 
-        <Modal
-          open={ deleteModalOpen }
-          onClose={ this.closeDeleteModal }
-        >
-          <Header icon='attention' content='Atenção!' />
-          <Modal.Content>
-            <h4>
-              Deseja apagar o post selecionado?
-            </h4>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button color='red' onClick={ this.closeDeleteModal }>
-              <Icon name='remove' /> Não
-            </Button>
-            <Button color='green' onClick={ this.handleDeleteModalAction }>
-              <Icon name='checkmark' /> Sim
-            </Button>
-          </Modal.Actions>
-        </Modal>
+        <DeletionModal
+          modalOpen={ deleteModalOpen }
+          modalBody={ 'Deseja apagar o post selecionado?' }
+          onCancel={ this.closeDeleteModal }
+          onConfirm={ this.handleDeleteModalAction }
+        />
       </Grid.Column>
     )
   }
