@@ -10,6 +10,7 @@ export const DELETE_POST = 'DELETE_POST'
 export const UPDATE_POST = 'UPDATE_POST'
 export const ADD_ALL_POST_COMMENTS = 'ADD_ALL_POST_COMMENTS'
 export const COMMENTS_ARE_LOADING = 'COMMENTS_ARE_LOADING'
+export const UPDATE_COMMENT = 'UPDATE_COMMENT'
 
 
 export function fetchData() {
@@ -200,5 +201,40 @@ export function addAllPostComments(post, comments) {
     type: ADD_ALL_POST_COMMENTS,
     post,
     comments
+  }
+}
+
+export function voteComment(comment, option) {
+  return (dispatch) => {
+    dispatch(updateCommentVoteScore(comment, option))
+
+    ServerAPI.voteComment(comment, option)
+    .then(res => {
+      if(res.hasOwnProperty('error')){
+        console.log('Vote error. Rolling back changes...')
+        dispatch(resetComment(comment))
+      }
+    })
+    .catch(error => {
+      console.log(`Server error: ${error}.\n\nRolling back changes...`)
+      dispatch(resetComment(comment))
+    })
+  }
+}
+
+export function resetComment(comment) {
+  return {
+    type: UPDATE_COMMENT,
+    comment
+  }
+}
+
+export function updateCommentVoteScore(comment, option) {
+  return {
+    type: UPDATE_COMMENT,
+    comment: {
+      ...comment,
+      voteScore: option === 'upVote' ? comment.voteScore + 1 : comment.voteScore - 1
+    }
   }
 }

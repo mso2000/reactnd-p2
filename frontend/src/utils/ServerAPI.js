@@ -70,3 +70,13 @@ export const editComment = (comment) =>
 export const deleteComment = (comment) =>
   fetch(`${api}/comments/${comment.id}`, { method: 'DELETE', headers })
     .then(res => res.json())
+
+export const voteComment = (comment, option) =>
+  fetch(`${api}/comments/${comment.id}`, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ option })
+  }).then(res => res.json())

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { fetchData, fetchPostComments } from '../actions'
+import { fetchData, fetchPostComments, voteComment } from '../actions'
 import { withRouter } from 'react-router-dom'
 import { Grid, Segment, Label, Icon, Comment, Header, Button, Message } from 'semantic-ui-react'
 import Post from './Post'
@@ -31,7 +31,7 @@ class PostDetails extends Component {
   }
 
   render() {
-    const { comments, sortOrder } = this.props
+    const { comments, sortOrder, voteComment } = this.props
     const { currentPost } = this.state
 
     const sortedComments = comments
@@ -67,8 +67,8 @@ class PostDetails extends Component {
                         <Icon name='thumbs up' /> {comment.voteScore}
                       </Label>
                       &nbsp;
-                      <Comment.Action>&#9650;</Comment.Action>
-                      <Comment.Action>&#9660;</Comment.Action>
+                      <Comment.Action onClick={ () => voteComment(comment, 'upVote') }>&#9650;</Comment.Action>
+                      <Comment.Action onClick={ () => voteComment(comment, 'downVote') }>&#9660;</Comment.Action>
                       &#8226;&nbsp;&nbsp;
                       <Comment.Action>Responder</Comment.Action>
                       &#8226;&nbsp;&nbsp;&nbsp;
@@ -101,7 +101,8 @@ function mapStateToProps ({ posts, comments, sortOrder }) {
 function mapDispatchToProps (dispatch) {
   return {
     fetchData: () => dispatch(fetchData()),
-    fetchPostComments: (data) => dispatch(fetchPostComments(data))
+    fetchPostComments: (data) => dispatch(fetchPostComments(data)),
+    voteComment: (comment, option) => dispatch(voteComment(comment, option))
   }
 }
 

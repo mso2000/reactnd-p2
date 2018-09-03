@@ -18,7 +18,10 @@ class Post extends Component {
   openDeleteModal = () => this.setState(() => ({ deleteModalOpen: true }))
   closeDeleteModal = () => this.setState(() => ({ deleteModalOpen: false }))
 
-  updatePost = (newPost) => this.props.updatePost(this.props.selectedPost, newPost)
+  updatePost = (newPost) => {
+    const {updatePost, selectedPost} = this.props
+    updatePost(selectedPost, newPost)
+  }
 
   handleDeleteModalAction = () => {
     const { removePost, selectedPost, history} = this.props

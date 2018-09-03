@@ -11,6 +11,7 @@ import {
   UPDATE_POST,
   ADD_ALL_POST_COMMENTS,
   COMMENTS_ARE_LOADING,
+  UPDATE_COMMENT,
 } from '../actions'
 
 function categories (state = [], action) {
@@ -67,7 +68,9 @@ function postsAreLoading (state = false, action) {
 function comments (state = [], action) {
   switch (action.type) {
     case ADD_ALL_POST_COMMENTS:
-      return [...state.filter(p => p.parentId !== action.post.id), ...action.comments]
+      return [...state.filter(c => c.parentId !== action.post.id), ...action.comments]
+    case UPDATE_COMMENT :
+      return [...state.filter(c => c.id !== action.comment.id), action.comment]
     default :
       return state
   }
