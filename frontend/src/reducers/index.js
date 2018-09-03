@@ -11,6 +11,8 @@ import {
   UPDATE_POST,
   ADD_ALL_POST_COMMENTS,
   COMMENTS_ARE_LOADING,
+  ADD_COMMENT,
+  DELETE_COMMENT,
   UPDATE_COMMENT,
 } from '../actions'
 
@@ -42,6 +44,7 @@ function sortOrder(state = 'voteScore', action) {
 }
 
 function posts (state = [], action) {
+  let parentPost
   switch (action.type) {
     case ADD_ALL_POSTS :
       return action.posts
@@ -51,6 +54,14 @@ function posts (state = [], action) {
       return state.filter(p => p.id !== action.post.id)
     case UPDATE_POST :
       return [...state.filter(p => p.id !== action.post.id), action.post]
+    case ADD_COMMENT :
+      parentPost = state.find(p => p.id === action.comment.parentId)
+      parentPost.commentCount++
+      return [...state.filter(p => p.id !== parentPost.id), parentPost]
+    case DELETE_COMMENT :
+      parentPost = state.find(p => p.id === action.comment.parentId)
+      parentPost.commentCount--
+      return [...state.filter(p => p.id !== parentPost.id), parentPost]
     default :
       return state
   }
@@ -69,6 +80,12 @@ function comments (state = [], action) {
   switch (action.type) {
     case ADD_ALL_POST_COMMENTS:
       return [...state.filter(c => c.parentId !== action.post.id), ...action.comments]
+    case ADD_COMMENT :
+      return [...state, action.comment]
+    case DELETE_POST :
+      return state.filter(c => c.parentId !== action.post.id)
+    case DELETE_COMMENT :
+      return state.filter(c => c.id !== action.comment.id)
     case UPDATE_COMMENT :
       return [...state.filter(c => c.id !== action.comment.id), action.comment]
     default :

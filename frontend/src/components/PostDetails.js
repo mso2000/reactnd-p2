@@ -1,16 +1,32 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { fetchData, fetchPostComments, voteComment } from '../actions'
+import { fetchData, fetchPostComments, removeComment, voteComment } from '../actions'
 import { withRouter } from 'react-router-dom'
 import { Grid, Segment, Label, Icon, Comment, Header, Button, Message } from 'semantic-ui-react'
 import Post from './Post'
+import DeletionModal from './DeletionModal'
 import sortBy from 'sort-by'
 import { formatData } from '../utils/helpers'
 
 // TODO: Finalizar controles de comentários: votar, criar/editar (author, body e timestamp), apagar
 
 class PostDetails extends Component {
-  state = { currentPost: {} }
+  state = {
+    currentPost: {},
+    currentComment: {},
+    deleteModalOpen: false
+  }
+
+  openDeleteModal = (comment) => this.setState(() => ({ deleteModalOpen: true, currentComment: comment }))
+  closeDeleteModal = () => this.setState(() => ({ deleteModalOpen: false, currentComment: {} }))
+
+  handleDeleteModalAction = () => {
+    const { removeComment } = this.props
+    const { currentComment } = this.state
+    removeComment(currentComment)
+    this.closeDeleteModal()
+  }
+
 
   componentDidMount(){
     const { match, posts, fetchPostComments } = this.props
@@ -32,7 +48,7 @@ class PostDetails extends Component {
 
   render() {
     const { comments, sortOrder, voteComment } = this.props
-    const { currentPost } = this.state
+    const { currentPost, deleteModalOpen } = this.state
 
     const sortedComments = comments
     .filter(c => c.parentId === currentPost.id)
@@ -74,7 +90,7 @@ class PostDetails extends Component {
                       &#8226;&nbsp;&nbsp;&nbsp;
                       <Comment.Action>Editar</Comment.Action>
                       &#8226;&nbsp;&nbsp;&nbsp;
-                      <Comment.Action>Apagar</Comment.Action>
+                      <Comment.Action onClick={ () => this.openDeleteModal(comment) }>Apagar</Comment.Action>
                     </Comment.Actions>
                   </Comment.Content>
                 </Comment>
@@ -89,6 +105,13 @@ class PostDetails extends Component {
         ) : (
           <Segment style={{ padding: '2em' }}><h3>Post não encontrado.</h3></Segment>
         )}
+
+        <DeletionModal
+          modalOpen={ deleteModalOpen }
+          modalBody={ 'Deseja apagar o comentário selecionado?' }
+          onCancel={ this.closeDeleteModal }
+          onConfirm={ this.handleDeleteModalAction }
+        />
       </Grid.Column>
     )
   }
@@ -102,6 +125,7 @@ function mapDispatchToProps (dispatch) {
   return {
     fetchData: () => dispatch(fetchData()),
     fetchPostComments: (data) => dispatch(fetchPostComments(data)),
+    removeComment: (data) => dispatch(removeComment(data)),
     voteComment: (comment, option) => dispatch(voteComment(comment, option))
   }
 }

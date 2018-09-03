@@ -10,6 +10,8 @@ export const DELETE_POST = 'DELETE_POST'
 export const UPDATE_POST = 'UPDATE_POST'
 export const ADD_ALL_POST_COMMENTS = 'ADD_ALL_POST_COMMENTS'
 export const COMMENTS_ARE_LOADING = 'COMMENTS_ARE_LOADING'
+export const ADD_COMMENT = 'ADD_COMMENT'
+export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const UPDATE_COMMENT = 'UPDATE_COMMENT'
 
 
@@ -74,7 +76,8 @@ export function updatePost(oldPost, newPost) {
 }
 
 export function removePost(post) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const postComments = getState().comments.filter(c => c.parentId === post.id)
     dispatch(deletePost(post))
 
     ServerAPI.deletePost(post)
@@ -82,11 +85,13 @@ export function removePost(post) {
       if(res.hasOwnProperty('error')){
         console.log('Delete error. Rolling back changes...')
         dispatch(addPost(post))
+        dispatch(addAllPostComments(post, postComments))
       }
     })
     .catch(error => {
       console.log(`Server error: ${error}.\n\nRolling back changes...`)
       dispatch(addPost(post))
+      dispatch(addAllPostComments(post, postComments))
     })
   }
 }
@@ -189,18 +194,21 @@ export function fetchPostComments(post) {
   }
 }
 
-export function commentsAreLoading (isLoading) {
-  return {
-    type: COMMENTS_ARE_LOADING,
-    isLoading
-  }
-}
+export function removeComment(comment) {
+  return (dispatch) => {
+    dispatch(deleteComment(comment))
 
-export function addAllPostComments(post, comments) {
-  return {
-    type: ADD_ALL_POST_COMMENTS,
-    post,
-    comments
+    ServerAPI.deleteComment(comment)
+    .then(res => {
+      if(res.hasOwnProperty('error')){
+        console.log('Delete error. Rolling back changes...')
+        dispatch(addComment(comment))
+      }
+    })
+    .catch(error => {
+      console.log(`Server error: ${error}.\n\nRolling back changes...`)
+      dispatch(addComment(comment))
+    })
   }
 }
 
@@ -219,6 +227,35 @@ export function voteComment(comment, option) {
       console.log(`Server error: ${error}.\n\nRolling back changes...`)
       dispatch(resetComment(comment))
     })
+  }
+}
+
+export function addAllPostComments(post, comments) {
+  return {
+    type: ADD_ALL_POST_COMMENTS,
+    post,
+    comments
+  }
+}
+
+export function commentsAreLoading (isLoading) {
+  return {
+    type: COMMENTS_ARE_LOADING,
+    isLoading
+  }
+}
+
+export function addComment (comment) {
+  return {
+    type: ADD_COMMENT,
+    comment
+  }
+}
+
+export function deleteComment (comment) {
+  return {
+    type: DELETE_COMMENT,
+    comment
   }
 }
 
