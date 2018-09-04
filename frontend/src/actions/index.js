@@ -307,7 +307,8 @@ export function updateCommentVoteScore(comment, option) {
     type: UPDATE_COMMENT,
     comment: {
       ...comment,
-      voteScore: option === 'upVote' ? comment.voteScore + 1 : comment.voteScore - 1
+      voteScore: option === 'upVote' ?
+        comment.voteScore + 1 : comment.voteScore - 1
     }
   }
 }

@@ -1,27 +1,38 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux'
 import { fetchData } from '../actions'
 import { Grid, Menu } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types';
 
-class CategoryMenu extends Component {
-  state = { }
-  // TODO: Considerar transformar em stateless
+const CategoryMenu = (props) => {
+  const { categories, match, fetchData } = props
 
-  render() {
-    const { categories, match, fetchData } = this.props
-
-    return (
-      <Grid.Column width={2} stretched>
-        <Menu fluid vertical tabular>
-          <Menu.Item as={Link} to='/' name='all' active={match.url === '/'} onClick={fetchData}>Todos</Menu.Item>
-          {categories.map(c => (
-            <Menu.Item as={Link} to={'/' + c.path} key={c.path} name={c.path} active={match.url === '/' + c.path} onClick={fetchData} />
-          ))}
-        </Menu>
-      </Grid.Column>
-    )
-  }
+  return (
+    <Grid.Column width={2} stretched>
+      <Menu fluid vertical tabular>
+        <Menu.Item
+          as={Link}
+          to='/'
+          name='all'
+          active={match.url === '/'}
+          onClick={fetchData}
+        >
+          Todos
+        </Menu.Item>
+        {categories.map(c => (
+          <Menu.Item
+            as={Link}
+            to={'/' + c.path}
+            key={c.path}
+            name={c.path}
+            active={match.url === '/' + c.path}
+            onClick={fetchData}
+          />
+        ))}
+      </Menu>
+    </Grid.Column>
+  )
 }
 
 function mapStateToProps ({ categories }) {
@@ -34,4 +45,12 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CategoryMenu))
+CategoryMenu.propTypes = {
+  categories: PropTypes.array.isRequired,
+  fetchData: PropTypes.func.isRequired,
+  match: PropTypes.object.isRequired
+}
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(CategoryMenu)
+)

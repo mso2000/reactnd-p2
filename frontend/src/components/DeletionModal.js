@@ -24,8 +24,8 @@ const DeletionModal = (props) => {
 }
 
 DeletionModal.propTypes = {
+	modalBody: PropTypes.string.isRequired,
   modalOpen: PropTypes.bool.isRequired,
-  modalBody: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired
 }

@@ -6,6 +6,7 @@ import { Grid, Button, Segment, Icon, Menu, Label } from 'semantic-ui-react'
 import PostEdit from './PostEdit'
 import DeletionModal from './DeletionModal'
 import { formatData } from '../utils/helpers'
+import PropTypes from 'prop-types'
 
 class Post extends Component {
   state = {
@@ -13,11 +14,11 @@ class Post extends Component {
     deleteModalOpen: false,
   }
 
-  openEditPostModal = () => this.setState(() => ({ editModalOpen: true }))
-  closeEditPostModal = () => this.setState(() => ({ editModalOpen: false }))
+  openEditPostModal = () => this.setState({ editModalOpen: true })
+  closeEditPostModal = () => this.setState({ editModalOpen: false })
 
-  openDeleteModal = () => this.setState(() => ({ deleteModalOpen: true }))
-  closeDeleteModal = () => this.setState(() => ({ deleteModalOpen: false }))
+  openDeleteModal = () => this.setState({ deleteModalOpen: true })
+  closeDeleteModal = () => this.setState({ deleteModalOpen: false })
 
   updatePost = (newPost) => {
     const {updatePost, selectedPost} = this.props
@@ -40,7 +41,9 @@ class Post extends Component {
       <Grid.Column>
         <h1>
           { showDetails ? selectedPost.title : (
-            <Link to={`/${selectedPost.category}/${selectedPost.id}`}>{selectedPost.title}</Link>
+            <Link to={`/${selectedPost.category}/${selectedPost.id}`}>
+              {selectedPost.title}
+            </Link>
           )}
         </h1>
         Data: <b>{formatData(selectedPost.timestamp)}</b> -
@@ -66,13 +69,19 @@ class Post extends Component {
             )}
           </Menu.Item>
           <Button.Group size='mini' floated='right'>
-            <Button animated='vertical' onClick={ () => votePost(selectedPost, 'upVote') }>
+            <Button
+              animated='vertical'
+              onClick={ () => votePost(selectedPost, 'upVote') }
+            >
               <Button.Content hidden>+1</Button.Content>
               <Button.Content visible>
                 <Icon name='thumbs up' />
               </Button.Content>
             </Button>
-            <Button animated='vertical' onClick={ () => votePost(selectedPost, 'downVote') }>
+            <Button
+              animated='vertical'
+              onClick={ () => votePost(selectedPost, 'downVote') }
+            >
               <Button.Content hidden>-1</Button.Content>
               <Button.Content visible>
                 <Icon name='thumbs down' />
@@ -80,13 +89,21 @@ class Post extends Component {
             </Button>
           </Button.Group>&nbsp;&nbsp;
           <Button.Group size='mini' floated='right'>
-            <Button animated='vertical' color='green' onClick={ this.openEditPostModal }>
+            <Button
+              animated='vertical'
+              color='green'
+              onClick={ this.openEditPostModal }
+            >
               <Button.Content hidden>Editar</Button.Content>
               <Button.Content visible>
                 <Icon name='edit' />
               </Button.Content>
             </Button>
-            <Button animated='vertical' color='red' onClick={ this.openDeleteModal }>
+            <Button
+              animated='vertical'
+              color='red'
+              onClick={ this.openDeleteModal }
+            >
               <Button.Content hidden>Apagar</Button.Content>
               <Button.Content visible>
                 <Icon name='trash' />
@@ -125,6 +142,19 @@ function mapDispatchToProps (dispatch) {
     updatePost: (oldPost, newPost) => dispatch(updatePost(oldPost, newPost)),
     votePost: (post, option) => dispatch(votePost(post, option))
   }
+}
+
+Post.propTypes = {
+  fetchData: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
+  posts: PropTypes.array.isRequired,
+  removePost: PropTypes.func.isRequired,
+  selectedPost: PropTypes.object.isRequired,
+  showDetails: PropTypes.bool.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  updatePost: PropTypes.func.isRequired,
+  votePost: PropTypes.func.isRequired
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Post))

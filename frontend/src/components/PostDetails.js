@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { fetchData, fetchPostComments, addNewComment, updateComment, removeComment, voteComment } from '../actions'
+import { fetchData, fetchPostComments, addNewComment,
+        updateComment, removeComment, voteComment } from '../actions'
 import { withRouter } from 'react-router-dom'
-import { Grid, Segment, Label, Icon, Comment, Header, Button, Message } from 'semantic-ui-react'
+import { Grid, Segment, Label, Icon, Comment,
+        Header, Button, Message } from 'semantic-ui-react'
 import Post from './Post'
 import CommentEdit from './CommentEdit'
 import DeletionModal from './DeletionModal'
 import sortBy from 'sort-by'
 import { formatData } from '../utils/helpers'
+import PropTypes from 'prop-types'
 
 class PostDetails extends Component {
   state = {
@@ -17,11 +20,36 @@ class PostDetails extends Component {
     deleteModalOpen: false
   }
 
-  openEditCommentModal = (comment = { parentId: this.state.currentPost.id }) => this.setState(() => ({ editModalOpen: true, currentComment: comment }))
-  closeEditCommentModal = () => this.setState(() => ({ editModalOpen: false, currentComment: {} }))
+// TODO: Verificar porque comentários recém-criados, quando deletados, não são apagados da Store
 
-  openDeleteModal = (comment) => this.setState(() => ({ deleteModalOpen: true, currentComment: comment }))
-  closeDeleteModal = () => this.setState(() => ({ deleteModalOpen: false, currentComment: {} }))
+  openEditCommentModal = (comment = { parentId: this.state.currentPost.id }) => {
+    this.setState(
+      {
+        editModalOpen: true,
+        currentComment: comment }
+      )
+  }
+
+  closeEditCommentModal = () => this.setState(
+    {
+      editModalOpen: false,
+      currentComment: {}
+    }
+  )
+
+  openDeleteModal = (comment) => this.setState(
+    {
+      deleteModalOpen: true,
+      currentComment: comment
+    }
+  )
+
+  closeDeleteModal = () => this.setState(
+    {
+      deleteModalOpen: false,
+      currentComment: {}
+    }
+  )
 
   updateComment = (newComment) => {
     const { currentComment } = this.state
@@ -72,7 +100,13 @@ class PostDetails extends Component {
             />
 
             <Comment.Group>
-              <Button content='Adicionar Comentário' labelPosition='left' icon='edit' primary onClick={ () => this.openEditCommentModal() } />
+              <Button
+                primary
+                content='Adicionar Comentário'
+                labelPosition='left'
+                icon='edit'
+                onClick={ () => this.openEditCommentModal() }
+              />
               <Header as='h3' dividing>
                 Comentários ({currentPost.commentCount})
               </Header>
@@ -91,21 +125,33 @@ class PostDetails extends Component {
                         <Icon name='thumbs up' /> {comment.voteScore}
                       </Label>
                       &nbsp;
-                      <Comment.Action onClick={ () => voteComment(comment, 'upVote') }>&#9650;</Comment.Action>
-                      <Comment.Action onClick={ () => voteComment(comment, 'downVote') }>&#9660;</Comment.Action>
+                      <Comment.Action onClick={() => voteComment(comment, 'upVote')}>
+                        &#9650;
+                      </Comment.Action>
+                      <Comment.Action onClick={() => voteComment(comment, 'downVote')}>
+                        &#9660;
+                      </Comment.Action>
                       &#8226;&nbsp;&nbsp;
-                      <Comment.Action onClick={ () => this.openEditCommentModal() }>Responder</Comment.Action>
+                      <Comment.Action onClick={() => this.openEditCommentModal()}>
+                        Responder
+                      </Comment.Action>
                       &#8226;&nbsp;&nbsp;&nbsp;
-                      <Comment.Action onClick={ () => this.openEditCommentModal(comment) }>Editar</Comment.Action>
+                      <Comment.Action onClick={() => this.openEditCommentModal(comment)}>
+                        Editar
+                      </Comment.Action>
                       &#8226;&nbsp;&nbsp;&nbsp;
-                      <Comment.Action onClick={ () => this.openDeleteModal(comment) }>Apagar</Comment.Action>
+                      <Comment.Action onClick={() => this.openDeleteModal(comment)}>
+                        Apagar
+                      </Comment.Action>
                     </Comment.Actions>
                   </Comment.Content>
                 </Comment>
               )) : (
                 <Message info>
                   <Message.Header>Ainda não há comentários</Message.Header>
-                  <p>Contribua e seja o primeiro. Sua participação é muito importante.</p>
+                  <p>
+                    Contribua e seja o primeiro. Sua participação é muito importante.
+                  </p>
                 </Message>
               )}
             </Comment.Group>
@@ -119,7 +165,8 @@ class PostDetails extends Component {
           onCloseModal={ this.closeEditCommentModal }
           isNewComment={ !currentComment.hasOwnProperty('id') }
           comment={ currentComment }
-          onChangeComment={ currentComment.hasOwnProperty('id') ? this.updateComment : addNewComment }
+          onChangeComment={ currentComment.hasOwnProperty('id') ?
+            this.updateComment : addNewComment }
         />
 
         <DeletionModal
@@ -148,5 +195,17 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
+PostDetails.propTypes = {
+  addNewComment: PropTypes.func.isRequired,
+  comments: PropTypes.array.isRequired,
+  fetchData: PropTypes.func.isRequired,
+  fetchPostComments: PropTypes.func.isRequired,
+  match: PropTypes.object.isRequired,
+  posts: PropTypes.array.isRequired,
+  removeComment: PropTypes.func.isRequired,
+  sortOrder: PropTypes.string.isRequired,
+  updateComment: PropTypes.func.isRequired,
+  voteComment: PropTypes.func.isRequired
+}
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PostDetails))

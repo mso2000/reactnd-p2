@@ -9,7 +9,6 @@ import { Grid } from 'semantic-ui-react'
 import { Route, withRouter } from 'react-router-dom'
 
 class App extends Component {
-  state = {}
 
   componentDidMount(){
     this.props.fetchData()

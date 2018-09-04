@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { Header, Modal, Form, Divider } from 'semantic-ui-react'
 import serializeForm from 'form-serialize'
+import PropTypes from 'prop-types'
 
 class PostEdit extends Component {
   state = {
@@ -13,17 +14,19 @@ class PostEdit extends Component {
     body: ''
   }
 
-  handleFormCategoryChange = (e, { value }) => this.setState({ category: value })
-  handleFormInputChange = (e, { name, value }) => this.setState({ [name]: value })
+  handleFormCategoryChange = (e, {value}) => this.setState({ category: value })
+  handleFormInputChange = (e, {name, value}) => this.setState({ [name]: value })
   closeModal = () => {
     this.props.onCloseModal()
-    this.setState(() => ({
-      formIsInvalid: false,
-      category: '',
-      title: '',
-      author: '',
-      body: ''
-    }))
+    this.setState(
+      {
+        formIsInvalid: false,
+        category: '',
+        title: '',
+        author: '',
+        body: ''
+      }
+    )
   }
 
   handleSubmit = (e) => {
@@ -32,10 +35,12 @@ class PostEdit extends Component {
     const formValues = serializeForm(e.target, { hash: true })
 
     formValues.category = this.state.category.length ?
-      this.state.category : (post ? post.category : '')
+      this.state.category : (post.length ? post.category : '')
 
-    formValues.title = formValues.hasOwnProperty('title') ? formValues.title : ''
-    formValues.author = formValues.hasOwnProperty('author') ? formValues.author : ''
+    formValues.title = formValues.hasOwnProperty('title') ?
+      formValues.title : ''
+    formValues.author = formValues.hasOwnProperty('author') ?
+      formValues.author : ''
     formValues.body = formValues.hasOwnProperty('body') ? formValues.body : ''
 
     const formIsInvalid = !(formValues.title.length
@@ -95,32 +100,88 @@ class PostEdit extends Component {
         onClose={ this.closeModal }
         closeIcon
       >
-        <Header icon='archive' content={isNewPost ? 'Criar um novo post' : 'Editar post'} />
+        <Header
+          icon='archive'
+          content={isNewPost ? 'Criar um novo post' : 'Editar post'}
+        />
         <Modal.Content image>
           <Modal.Description>
             <Form onSubmit={this.handleSubmit}>
               { formIsInvalid && !title.length ? (
-                <Form.Input error name='title' label='Título' placeholder='title' onChange={this.handleFormInputChange} />
+                <Form.Input
+                  error
+                  name='title'
+                  label='Título'
+                  placeholder='title'
+                  onChange={this.handleFormInputChange}
+                />
               ) : (
-                <Form.Input name='title' label='Título' placeholder='title' defaultValue={isNewPost ? '' : post.title} />
+                <Form.Input
+                  name='title'
+                  label='Título'
+                  placeholder='title'
+                  defaultValue={isNewPost ? '' : post.title}
+                  />
               )}
               { formIsInvalid && !author.length ? (
-                <Form.Input error name='author' label='Autor' placeholder='Autor' onChange={this.handleFormInputChange} />
+                <Form.Input
+                  error
+                  name='author'
+                  label='Autor'
+                  placeholder='Autor'
+                  onChange={this.handleFormInputChange}
+                />
               ) : (
-                <Form.Input name='author' label='Autor' placeholder='Autor' defaultValue={isNewPost ? '' : post.author} />
+                <Form.Input
+                  name='author'
+                  label='Autor'
+                  placeholder='Autor'
+                  defaultValue={isNewPost ? '' : post.author}
+                />
               )}
               { formIsInvalid && !body.length ? (
-                <Form.TextArea error name='body' label='Corpo' placeholder='Corpo' onChange={this.handleFormInputChange} />
+                <Form.TextArea
+                  error
+                  name='body'
+                  label='Corpo'
+                  placeholder='Corpo'
+                  onChange={this.handleFormInputChange}
+                />
               ) : (
-                <Form.TextArea name='body' label='Corpo' placeholder='Corpo' defaultValue={isNewPost ? '' : post.body} />
+                <Form.TextArea
+                  name='body'
+                  label='Corpo'
+                  placeholder='Corpo'
+                  defaultValue={isNewPost ? '' : post.body}
+                />
               )}
               { formIsInvalid && !category.length ? (
-                <Form.Select error fluid label='Categoria' options={options} placeholder='Escolha uma categoria' onChange={ this.handleFormCategoryChange }/>
+                <Form.Select
+                  error
+                  fluid
+                  label='Categoria'
+                  options={options}
+                  placeholder='Escolha uma categoria'
+                  onChange={ this.handleFormCategoryChange }
+                />
               ) : (
-                <Form.Select fluid label='Categoria' options={options} placeholder='Escolha uma categoria' onChange={ this.handleFormCategoryChange } defaultValue={isNewPost ? '' : post.category}/>
+                <Form.Select
+                  fluid
+                  label='Categoria'
+                  options={options}
+                  placeholder='Escolha uma categoria'
+                  onChange={ this.handleFormCategoryChange }
+                  defaultValue={isNewPost ? '' : post.category}
+                />
               )}
               <Divider />
-              <Form.Button primary floated='right' content='Publicar' labelPosition='left' icon='edit' />
+              <Form.Button
+                primary
+                floated='right'
+                content='Publicar'
+                labelPosition='left'
+                icon='edit'
+              />
             </Form>
           </Modal.Description>
         </Modal.Content>
@@ -133,5 +194,14 @@ function mapStateToProps ({ categories }) {
   return { categories }
 }
 
+PostEdit.propTypes = {
+  categories: PropTypes.array.isRequired,
+  history: PropTypes.object.isRequired,
+  isNewPost: PropTypes.bool.isRequired,
+  onChangePost: PropTypes.func.isRequired,
+  onCloseModal: PropTypes.func.isRequired,
+  modalOpen: PropTypes.bool.isRequired,
+  post: PropTypes.object.isRequired
+}
 
 export default withRouter(connect(mapStateToProps)(PostEdit))

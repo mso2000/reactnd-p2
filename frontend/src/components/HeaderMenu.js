@@ -3,13 +3,14 @@ import { connect } from 'react-redux'
 import { addNewPost, selectSortOrder } from '../actions'
 import PostEdit from './PostEdit'
 import { Grid, Menu, Header, Image, Button } from 'semantic-ui-react'
+import PropTypes from 'prop-types'
 
 class HeaderMenu extends Component {
   state = { newPostModalOpen: false }
 
   handleMenuItemClick = (e, obj) => this.props.selectSortOrder(obj.name)
-  openNewPostModal = () => this.setState(() => ({ newPostModalOpen: true }))
-  closeNewPostModal = () => this.setState(() => ({ newPostModalOpen: false }))
+  openNewPostModal = () => this.setState({ newPostModalOpen: true })
+  closeNewPostModal = () => this.setState({ newPostModalOpen: false })
 
   render() {
     const { sortOrder, addNewPost } = this.props
@@ -25,16 +26,34 @@ class HeaderMenu extends Component {
           </Menu.Item>
           <Menu.Menu position='right'>
             <Menu.Item name='sort_by'><b>Ordenar por:</b></Menu.Item>
-            <Menu.Item name='timestamp' active={sortOrder === 'timestamp'} onClick={this.handleMenuItemClick}>Data</Menu.Item>
-            <Menu.Item name='voteScore' active={sortOrder === 'voteScore'} onClick={this.handleMenuItemClick}>Votos</Menu.Item>
+            <Menu.Item
+              name='timestamp'
+              active={ sortOrder === 'timestamp' }
+              onClick={ this.handleMenuItemClick }
+            >
+              Data
+            </Menu.Item>
+            <Menu.Item
+              name='voteScore'
+              active={ sortOrder === 'voteScore' }
+              onClick={ this.handleMenuItemClick }
+            >
+              Votos
+            </Menu.Item>
           </Menu.Menu>
           <Menu.Item name='new_post'>
-            <Button content='Novo Post' labelPosition='left' icon='edit' primary onClick={ this.openNewPostModal } />
+            <Button
+              primary
+              content='Novo Post'
+              labelPosition='left'
+              icon='edit'
+              onClick={ this.openNewPostModal }
+            />
             <PostEdit
               modalOpen={ newPostModalOpen }
               onCloseModal={ this.closeNewPostModal }
               isNewPost={ true }
-              post={ null }
+              post={{}}
               onChangePost={addNewPost}
             />
           </Menu.Item>
@@ -54,6 +73,12 @@ function mapDispatchToProps (dispatch) {
     addNewPost: (data) => dispatch(addNewPost(data)),
     selectSortOrder: (data) => dispatch(selectSortOrder(data))
   }
+}
+
+HeaderMenu.propTypes = {
+  addNewPost: PropTypes.func.isRequired,
+  selectSortOrder: PropTypes.func.isRequired,
+  sortOrder: PropTypes.string.isRequired
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderMenu)

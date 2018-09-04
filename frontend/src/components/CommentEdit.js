@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Modal, Form, Divider } from 'semantic-ui-react'
 import serializeForm from 'form-serialize'
+import PropTypes from 'prop-types';
 
 class CommentEdit extends Component {
   state = {
@@ -9,14 +10,16 @@ class CommentEdit extends Component {
     body: ''
   }
 
-  handleFormInputChange = (e, { name, value }) => this.setState({ [name]: value })
+  handleFormInputChange = (e, {name, value}) => this.setState({ [name]: value })
   closeModal = () => {
     this.props.onCloseModal()
-    this.setState(() => ({
-      formIsInvalid: false,
-      author: '',
-      body: ''
-    }))
+    this.setState(
+      {
+        formIsInvalid: false,
+        author: '',
+        body: ''
+      }
+    )
   }
 
   handleSubmit = (e) => {
@@ -67,22 +70,51 @@ class CommentEdit extends Component {
         onClose={ this.closeModal }
         closeIcon
       >
-        <Header icon='archive' content={isNewComment ? 'Criar um novo comentário' : 'Editar comentário'} />
+        <Header icon='archive' content={
+          isNewComment ? 'Criar um novo comentário' : 'Editar comentário'} />
         <Modal.Content image>
           <Modal.Description>
             <Form onSubmit={this.handleSubmit}>
               { formIsInvalid && !author.length ? (
-                <Form.Input error name='author' label='Autor' placeholder='Autor' onChange={this.handleFormInputChange} />
+                <Form.Input
+                  error
+                  name='author'
+                  label='Autor'
+                  placeholder='Autor'
+                  onChange={this.handleFormInputChange}
+                />
               ) : (
-                <Form.Input name='author' label='Autor' placeholder='Autor' defaultValue={isNewComment ? '' : comment.author} />
+                <Form.Input
+                  name='author'
+                  label='Autor'
+                  placeholder='Autor'
+                  defaultValue={isNewComment ? '' : comment.author}
+                />
               )}
               { formIsInvalid && !body.length ? (
-                <Form.TextArea error name='body' label='Corpo' placeholder='Corpo' onChange={this.handleFormInputChange} />
+                <Form.TextArea
+                  error
+                  name='body'
+                  label='Corpo'
+                  placeholder='Corpo'
+                  onChange={this.handleFormInputChange}
+                />
               ) : (
-                <Form.TextArea name='body' label='Corpo' placeholder='Corpo' defaultValue={isNewComment ? '' : comment.body} />
+                <Form.TextArea
+                  name='body'
+                  label='Corpo'
+                  placeholder='Corpo'
+                  defaultValue={isNewComment ? '' : comment.body}
+                />
               )}
               <Divider />
-              <Form.Button primary floated='right' content='Publicar' labelPosition='left' icon='edit' />
+              <Form.Button
+                primary
+                floated='right'
+                content='Publicar'
+                labelPosition='left'
+                icon='edit'
+              />
             </Form>
           </Modal.Description>
         </Modal.Content>
@@ -91,5 +123,12 @@ class CommentEdit extends Component {
   }
 }
 
+CommentEdit.propTypes = {
+  comment: PropTypes.object.isRequired,
+  isNewComment: PropTypes.bool.isRequired,
+  modalOpen: PropTypes.bool.isRequired,
+  onChangeComment: PropTypes.func.isRequired,
+  onCloseModal: PropTypes.func.isRequired
+}
 
 export default CommentEdit
