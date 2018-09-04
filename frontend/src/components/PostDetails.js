@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { fetchData, fetchPostComments, removeComment, voteComment } from '../actions'
+import { fetchData, fetchPostComments, addNewComment, updateComment, removeComment, voteComment } from '../actions'
 import { withRouter } from 'react-router-dom'
 import { Grid, Segment, Label, Icon, Comment, Header, Button, Message } from 'semantic-ui-react'
 import Post from './Post'
@@ -24,7 +24,9 @@ class PostDetails extends Component {
   closeDeleteModal = () => this.setState(() => ({ deleteModalOpen: false, currentComment: {} }))
 
   updateComment = (newComment) => {
-    console.log(newComment)
+    const { currentComment } = this.state
+    const { updateComment } = this.props
+    updateComment(currentComment, newComment)
   }
 
   handleDeleteModalAction = () => {
@@ -53,7 +55,7 @@ class PostDetails extends Component {
   }
 
   render() {
-    const { comments, sortOrder, voteComment } = this.props
+    const { comments, sortOrder, addNewComment, voteComment } = this.props
     const { currentPost, currentComment, editModalOpen, deleteModalOpen } = this.state
 
     const sortedComments = comments
@@ -117,7 +119,7 @@ class PostDetails extends Component {
           onCloseModal={ this.closeEditCommentModal }
           isNewComment={ !currentComment.hasOwnProperty('id') }
           comment={ currentComment }
-          onChangeComment={ this.updateComment }
+          onChangeComment={ currentComment.hasOwnProperty('id') ? this.updateComment : addNewComment }
         />
 
         <DeletionModal
@@ -139,6 +141,8 @@ function mapDispatchToProps (dispatch) {
   return {
     fetchData: () => dispatch(fetchData()),
     fetchPostComments: (data) => dispatch(fetchPostComments(data)),
+    addNewComment: (data) => dispatch(addNewComment(data)),
+    updateComment: (oldData, newData) => dispatch(updateComment(oldData, newData)),
     removeComment: (data) => dispatch(removeComment(data)),
     voteComment: (comment, option) => dispatch(voteComment(comment, option))
   }

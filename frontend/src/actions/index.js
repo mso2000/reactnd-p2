@@ -194,6 +194,42 @@ export function fetchPostComments(post) {
   }
 }
 
+export function addNewComment(comment) {
+  return (dispatch) => {
+    dispatch(addComment(comment))
+
+    ServerAPI.addComment(comment)
+    .then(res => {
+      if(!res.hasOwnProperty('id')){
+        console.log('Insertion error. Rolling back changes...')
+        dispatch(deleteComment(comment))
+      }
+    })
+    .catch(error => {
+      console.log(`Server error: ${error}.\n\nRolling back changes...`)
+      dispatch(deleteComment(comment))
+    })
+  }
+}
+
+export function updateComment(oldComment, newComment) {
+  return (dispatch) => {
+    dispatch(resetComment(newComment))
+
+    ServerAPI.editComment(newComment)
+    .then(res => {
+      if(res.hasOwnProperty('error')){
+        console.log('Edit error. Rolling back changes...')
+        dispatch(resetComment(oldComment))
+      }
+    })
+    .catch(error => {
+      console.log(`Edit error: ${error}.\n\nRolling back changes...`)
+      dispatch(resetComment(oldComment))
+    })
+  }
+}
+
 export function removeComment(comment) {
   return (dispatch) => {
     dispatch(deleteComment(comment))
