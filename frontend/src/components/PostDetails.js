@@ -4,21 +4,28 @@ import { fetchData, fetchPostComments, removeComment, voteComment } from '../act
 import { withRouter } from 'react-router-dom'
 import { Grid, Segment, Label, Icon, Comment, Header, Button, Message } from 'semantic-ui-react'
 import Post from './Post'
+import CommentEdit from './CommentEdit'
 import DeletionModal from './DeletionModal'
 import sortBy from 'sort-by'
 import { formatData } from '../utils/helpers'
-
-// TODO: Finalizar controles de comentários: votar, criar/editar (author, body e timestamp), apagar
 
 class PostDetails extends Component {
   state = {
     currentPost: {},
     currentComment: {},
+    editModalOpen: false,
     deleteModalOpen: false
   }
 
+  openEditCommentModal = (comment = { parentId: this.state.currentPost.id }) => this.setState(() => ({ editModalOpen: true, currentComment: comment }))
+  closeEditCommentModal = () => this.setState(() => ({ editModalOpen: false, currentComment: {} }))
+
   openDeleteModal = (comment) => this.setState(() => ({ deleteModalOpen: true, currentComment: comment }))
   closeDeleteModal = () => this.setState(() => ({ deleteModalOpen: false, currentComment: {} }))
+
+  updateComment = (newComment) => {
+    console.log(newComment)
+  }
 
   handleDeleteModalAction = () => {
     const { removeComment } = this.props
@@ -26,7 +33,6 @@ class PostDetails extends Component {
     removeComment(currentComment)
     this.closeDeleteModal()
   }
-
 
   componentDidMount(){
     const { match, posts, fetchPostComments } = this.props
@@ -48,7 +54,7 @@ class PostDetails extends Component {
 
   render() {
     const { comments, sortOrder, voteComment } = this.props
-    const { currentPost, deleteModalOpen } = this.state
+    const { currentPost, currentComment, editModalOpen, deleteModalOpen } = this.state
 
     const sortedComments = comments
     .filter(c => c.parentId === currentPost.id)
@@ -64,7 +70,7 @@ class PostDetails extends Component {
             />
 
             <Comment.Group>
-              <Button content='Adicionar Comentário' labelPosition='left' icon='edit' primary />
+              <Button content='Adicionar Comentário' labelPosition='left' icon='edit' primary onClick={ () => this.openEditCommentModal() } />
               <Header as='h3' dividing>
                 Comentários ({currentPost.commentCount})
               </Header>
@@ -86,9 +92,9 @@ class PostDetails extends Component {
                       <Comment.Action onClick={ () => voteComment(comment, 'upVote') }>&#9650;</Comment.Action>
                       <Comment.Action onClick={ () => voteComment(comment, 'downVote') }>&#9660;</Comment.Action>
                       &#8226;&nbsp;&nbsp;
-                      <Comment.Action>Responder</Comment.Action>
+                      <Comment.Action onClick={ () => this.openEditCommentModal() }>Responder</Comment.Action>
                       &#8226;&nbsp;&nbsp;&nbsp;
-                      <Comment.Action>Editar</Comment.Action>
+                      <Comment.Action onClick={ () => this.openEditCommentModal(comment) }>Editar</Comment.Action>
                       &#8226;&nbsp;&nbsp;&nbsp;
                       <Comment.Action onClick={ () => this.openDeleteModal(comment) }>Apagar</Comment.Action>
                     </Comment.Actions>
@@ -105,6 +111,14 @@ class PostDetails extends Component {
         ) : (
           <Segment style={{ padding: '2em' }}><h3>Post não encontrado.</h3></Segment>
         )}
+
+        <CommentEdit
+          modalOpen={ editModalOpen }
+          onCloseModal={ this.closeEditCommentModal }
+          isNewComment={ !currentComment.hasOwnProperty('id') }
+          comment={ currentComment }
+          onChangeComment={ this.updateComment }
+        />
 
         <DeletionModal
           modalOpen={ deleteModalOpen }
