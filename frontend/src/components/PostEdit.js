@@ -74,6 +74,7 @@ class PostEdit extends Component {
       onChangePost({...formValues, ...extraValues, timestamp: Date.now() })
 
       this.closeModal()
+
       history.push(`/${formValues.category}/${id}`)
     }
 
@@ -98,6 +99,8 @@ class PostEdit extends Component {
       <Modal
         open={ modalOpen }
         onClose={ this.closeModal }
+        onMount={ () => this.handleFormCategoryChange(null,
+          {value: isNewPost ? '' : post.category})}
         closeIcon
       >
         <Header

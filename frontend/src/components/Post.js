@@ -131,8 +131,8 @@ class Post extends Component {
   }
 }
 
-function mapStateToProps ({ posts, sortOrder }) {
-  return { posts, sortOrder }
+function mapStateToProps ({ sortOrder }) {
+  return { sortOrder }
 }
 
 function mapDispatchToProps (dispatch) {
@@ -148,7 +148,6 @@ Post.propTypes = {
   fetchData: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
-  posts: PropTypes.array.isRequired,
   removePost: PropTypes.func.isRequired,
   selectedPost: PropTypes.object.isRequired,
   showDetails: PropTypes.bool.isRequired,

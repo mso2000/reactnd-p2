@@ -72,10 +72,9 @@ class PostDetails extends Component {
   }
 
   componentDidUpdate(prevProps){
-    const { match, posts, fetchPostComments } = this.props
+    const { match, posts } = this.props
     const currentPost = posts.find(p => p.id === match.params.id)
-    if(currentPost && prevProps.posts.length !== posts.length){
-      fetchPostComments(currentPost)
+    if(currentPost && prevProps.posts !== posts){
       this.setState({ currentPost })
     }
   }
