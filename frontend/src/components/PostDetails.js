@@ -20,8 +20,6 @@ class PostDetails extends Component {
     deleteModalOpen: false
   }
 
-// TODO: Verificar porque comentários recém-criados, quando deletados, não são apagados da Store
-
   openEditCommentModal = (comment = { parentId: this.state.currentPost.id }) => {
     this.setState(
       {
@@ -76,7 +74,7 @@ class PostDetails extends Component {
   componentDidUpdate(prevProps){
     const { match, posts, fetchPostComments } = this.props
     const currentPost = posts.find(p => p.id === match.params.id)
-    if(currentPost && prevProps.posts !== posts){
+    if(currentPost && prevProps.posts.length !== posts.length){
       fetchPostComments(currentPost)
       this.setState({ currentPost })
     }
