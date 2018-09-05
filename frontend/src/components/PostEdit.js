@@ -112,14 +112,14 @@ class PostEdit extends Component {
                   error
                   name='title'
                   label='Título'
-                  placeholder='title'
+                  placeholder='Título'
                   onChange={this.handleFormInputChange}
                 />
               ) : (
                 <Form.Input
                   name='title'
                   label='Título'
-                  placeholder='title'
+                  placeholder='Título'
                   defaultValue={isNewPost ? '' : post.title}
                   />
               )}
