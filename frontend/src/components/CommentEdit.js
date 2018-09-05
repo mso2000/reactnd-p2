@@ -3,6 +3,14 @@ import { Header, Modal, Form, Divider } from 'semantic-ui-react'
 import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types';
 
+import {
+  MODAL_COMMENT_LABEL_NEW,
+  MODAL_COMMENT_LABEL_EDIT,
+  MODAL_COMMENT_INPUT_AUTHOR,
+  MODAL_COMMENT_INPUT_BODY,
+  MODAL_COMMENT_BUTTON_LABEL
+} from '../utils/constants.js'
+
 class CommentEdit extends Component {
   state = {
     formIsInvalid: false,
@@ -71,7 +79,7 @@ class CommentEdit extends Component {
         closeIcon
       >
         <Header icon='archive' content={
-          isNewComment ? 'Criar um novo comentário' : 'Editar comentário'} />
+          isNewComment ? MODAL_COMMENT_LABEL_NEW : MODAL_COMMENT_LABEL_EDIT} />
         <Modal.Content image>
           <Modal.Description>
             <Form onSubmit={this.handleSubmit}>
@@ -79,15 +87,15 @@ class CommentEdit extends Component {
                 <Form.Input
                   error
                   name='author'
-                  label='Autor'
-                  placeholder='Autor'
+                  label={ MODAL_COMMENT_INPUT_AUTHOR }
+                  placeholder={ MODAL_COMMENT_INPUT_AUTHOR }
                   onChange={this.handleFormInputChange}
                 />
               ) : (
                 <Form.Input
                   name='author'
-                  label='Autor'
-                  placeholder='Autor'
+                  label={ MODAL_COMMENT_INPUT_AUTHOR }
+                  placeholder={ MODAL_COMMENT_INPUT_AUTHOR }
                   defaultValue={isNewComment ? '' : comment.author}
                 />
               )}
@@ -95,15 +103,15 @@ class CommentEdit extends Component {
                 <Form.TextArea
                   error
                   name='body'
-                  label='Corpo'
-                  placeholder='Corpo'
+                  label={ MODAL_COMMENT_INPUT_BODY }
+                  placeholder={ MODAL_COMMENT_INPUT_BODY }
                   onChange={this.handleFormInputChange}
                 />
               ) : (
                 <Form.TextArea
                   name='body'
-                  label='Corpo'
-                  placeholder='Corpo'
+                  label={ MODAL_COMMENT_INPUT_BODY }
+                  placeholder={ MODAL_COMMENT_INPUT_BODY }
                   defaultValue={isNewComment ? '' : comment.body}
                 />
               )}
@@ -111,7 +119,7 @@ class CommentEdit extends Component {
               <Form.Button
                 primary
                 floated='right'
-                content='Publicar'
+                content={ MODAL_COMMENT_BUTTON_LABEL }
                 labelPosition='left'
                 icon='edit'
               />

@@ -8,6 +8,15 @@ import DeletionModal from './DeletionModal'
 import { formatData } from '../utils/helpers'
 import PropTypes from 'prop-types'
 
+import {
+  POST_DATE_LABEL,
+  POST_AUTHOR_LABEL,
+  POST_CATEGORY_LABEL,
+  POST_EDIT_BUTTON_LABEL,
+  POST_DELETE_BUTTON_LABEL,
+  MODAL_POST_DELETE_BODY
+} from '../utils/constants.js'
+
 class Post extends Component {
   state = {
     editModalOpen: false,
@@ -46,9 +55,9 @@ class Post extends Component {
             </Link>
           )}
         </h1>
-        Data: <b>{formatData(selectedPost.timestamp)}</b> -
-        Autor: <b>{selectedPost.author}</b> -
-        Categoria:
+        {POST_DATE_LABEL}: <b>{formatData(selectedPost.timestamp)}</b> -&nbsp;
+        {POST_AUTHOR_LABEL}: <b>{selectedPost.author}</b> -&nbsp;
+        {POST_CATEGORY_LABEL}:
         <Link to={'/' + selectedPost.category} onClick={fetchData}>
           <b> {selectedPost.category}</b>
         </Link>
@@ -94,7 +103,7 @@ class Post extends Component {
               color='green'
               onClick={ this.openEditPostModal }
             >
-              <Button.Content hidden>Editar</Button.Content>
+              <Button.Content hidden>{POST_EDIT_BUTTON_LABEL}</Button.Content>
               <Button.Content visible>
                 <Icon name='edit' />
               </Button.Content>
@@ -104,7 +113,7 @@ class Post extends Component {
               color='red'
               onClick={ this.openDeleteModal }
             >
-              <Button.Content hidden>Apagar</Button.Content>
+              <Button.Content hidden>{POST_DELETE_BUTTON_LABEL}</Button.Content>
               <Button.Content visible>
                 <Icon name='trash' />
               </Button.Content>
@@ -122,7 +131,7 @@ class Post extends Component {
 
         <DeletionModal
           modalOpen={ deleteModalOpen }
-          modalBody={ 'Deseja apagar o post selecionado?' }
+          modalBody={ MODAL_POST_DELETE_BODY }
           onCancel={ this.closeDeleteModal }
           onConfirm={ this.handleDeleteModalAction }
         />

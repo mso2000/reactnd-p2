@@ -5,6 +5,7 @@ import { Grid, Segment } from 'semantic-ui-react'
 import Post from './Post'
 import sortBy from 'sort-by'
 import PropTypes from 'prop-types'
+import { POST_LIST_ERROR } from '../utils/constants.js'
 
 const PostList = (props) => {
   const { posts, sortOrder, match } = props
@@ -25,7 +26,7 @@ const PostList = (props) => {
         </Segment>
       )) : (
         <Segment style={{ padding: '2em' }}>
-          <h3>Nenhum post encontrado.</h3>
+          <h3>{ POST_LIST_ERROR }</h3>
         </Segment>
       )}
     </Grid.Column>

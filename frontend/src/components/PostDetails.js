@@ -12,6 +12,21 @@ import sortBy from 'sort-by'
 import { formatData } from '../utils/helpers'
 import PropTypes from 'prop-types'
 
+import {
+  POST_ADD_COMMENT_BUTTON_LABEL,
+  POST_COMMENTS_LABEL,
+  COMMENT_ANSWER_LABEL,
+  COMMENT_EDIT_LABEL,
+  COMMENT_DELETE_LABEL,
+  COMMENT_LIST_ERROR_TITLE,
+  COMMENT_LIST_ERROR_BODY,
+  POST_NOT_FOUND_ERROR,
+  MODAL_COMMENT_DELETE_BODY
+} from '../utils/constants.js'
+
+// TODO: Verificar problema de post não encontrado não exibir erro
+// TODO: Verificar problema de rota não exibir comentários
+
 class PostDetails extends Component {
   state = {
     currentPost: {},
@@ -99,13 +114,13 @@ class PostDetails extends Component {
             <Comment.Group>
               <Button
                 primary
-                content='Adicionar Comentário'
+                content={ POST_ADD_COMMENT_BUTTON_LABEL }
                 labelPosition='left'
                 icon='edit'
                 onClick={ () => this.openEditCommentModal() }
               />
               <Header as='h3' dividing>
-                Comentários ({currentPost.commentCount})
+                {POST_COMMENTS_LABEL} ({currentPost.commentCount})
               </Header>
 
               {sortedComments.length ? sortedComments.map(comment => (
@@ -130,31 +145,29 @@ class PostDetails extends Component {
                       </Comment.Action>
                       &#8226;&nbsp;&nbsp;
                       <Comment.Action onClick={() => this.openEditCommentModal()}>
-                        Responder
+                        {COMMENT_ANSWER_LABEL}
                       </Comment.Action>
                       &#8226;&nbsp;&nbsp;&nbsp;
                       <Comment.Action onClick={() => this.openEditCommentModal(comment)}>
-                        Editar
+                        {COMMENT_EDIT_LABEL}
                       </Comment.Action>
                       &#8226;&nbsp;&nbsp;&nbsp;
                       <Comment.Action onClick={() => this.openDeleteModal(comment)}>
-                        Apagar
+                        {COMMENT_DELETE_LABEL}
                       </Comment.Action>
                     </Comment.Actions>
                   </Comment.Content>
                 </Comment>
               )) : (
                 <Message info>
-                  <Message.Header>Ainda não há comentários</Message.Header>
-                  <p>
-                    Contribua e seja o primeiro. Sua participação é muito importante.
-                  </p>
+                  <Message.Header>{COMMENT_LIST_ERROR_TITLE}</Message.Header>
+                  <p>{COMMENT_LIST_ERROR_BODY}</p>
                 </Message>
               )}
             </Comment.Group>
           </Segment>
         ) : (
-          <Segment style={{ padding: '2em' }}><h3>Post não encontrado.</h3></Segment>
+          <Segment style={{ padding: '2em' }}><h3>{POST_NOT_FOUND_ERROR}</h3></Segment>
         )}
 
         <CommentEdit
@@ -168,7 +181,7 @@ class PostDetails extends Component {
 
         <DeletionModal
           modalOpen={ deleteModalOpen }
-          modalBody={ 'Deseja apagar o comentário selecionado?' }
+          modalBody={ MODAL_COMMENT_DELETE_BODY }
           onCancel={ this.closeDeleteModal }
           onConfirm={ this.handleDeleteModalAction }
         />

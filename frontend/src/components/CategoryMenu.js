@@ -4,6 +4,7 @@ import { fetchData } from '../actions'
 import { Grid, Menu } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types';
+import { MAIN_MENU_ITEM_ALL } from '../utils/constants.js'
 
 const CategoryMenu = (props) => {
   const { categories, match, fetchData } = props
@@ -18,7 +19,7 @@ const CategoryMenu = (props) => {
           active={match.url === '/'}
           onClick={fetchData}
         >
-          Todos
+          { MAIN_MENU_ITEM_ALL }
         </Menu.Item>
         {categories.map(c => (
           <Menu.Item
