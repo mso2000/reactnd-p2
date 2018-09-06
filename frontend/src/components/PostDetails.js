@@ -24,9 +24,6 @@ import {
   MODAL_COMMENT_DELETE_BODY
 } from '../utils/constants.js'
 
-// TODO: Verificar problema de post não encontrado não exibir erro
-// TODO: Verificar problema de rota não exibir comentários
-
 class PostDetails extends Component {
   state = {
     currentPost: {},
@@ -87,10 +84,15 @@ class PostDetails extends Component {
   }
 
   componentDidUpdate(prevProps){
-    const { match, posts } = this.props
+    const { match, posts, fetchPostComments } = this.props
     const currentPost = posts.find(p => p.id === match.params.id)
-    if(currentPost && prevProps.posts !== posts){
-      this.setState({ currentPost })
+    if(currentPost){
+      if(prevProps.posts.length !== posts.length){
+        fetchPostComments(currentPost)
+      }
+      if(prevProps.posts !== posts){
+        this.setState({ currentPost })
+      }
     }
   }
 
@@ -104,7 +106,7 @@ class PostDetails extends Component {
 
     return (
       <Grid.Column>
-        {currentPost ? (
+        {currentPost.hasOwnProperty('id') ? (
           <Segment style={{ padding: '2em' }}>
             <Post
               showDetails = { true }

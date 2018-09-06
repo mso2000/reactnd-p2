@@ -5,6 +5,17 @@ import { Header, Modal, Form, Divider } from 'semantic-ui-react'
 import serializeForm from 'form-serialize'
 import PropTypes from 'prop-types'
 
+import {
+  MODAL_POST_LABEL_NEW,
+  MODAL_POST_LABEL_EDIT,
+  MODAL_POST_INPUT_TITLE,
+  MODAL_POST_INPUT_AUTHOR,
+  MODAL_POST_INPUT_BODY,
+  MODAL_POST_INPUT_CATEGORY,
+  MODAL_POST_CATEGORY_NONE,
+  MODAL_POST_BUTTON_LABEL
+} from '../utils/constants.js'
+
 class PostEdit extends Component {
   state = {
     formIsInvalid: false,
@@ -105,7 +116,7 @@ class PostEdit extends Component {
       >
         <Header
           icon='archive'
-          content={isNewPost ? 'Criar um novo post' : 'Editar post'}
+          content={isNewPost ? MODAL_POST_LABEL_NEW : MODAL_POST_LABEL_EDIT}
         />
         <Modal.Content image>
           <Modal.Description>
@@ -114,15 +125,15 @@ class PostEdit extends Component {
                 <Form.Input
                   error
                   name='title'
-                  label='Título'
-                  placeholder='Título'
+                  label={ MODAL_POST_INPUT_TITLE }
+                  placeholder={ MODAL_POST_INPUT_TITLE }
                   onChange={this.handleFormInputChange}
                 />
               ) : (
                 <Form.Input
                   name='title'
-                  label='Título'
-                  placeholder='Título'
+                  label={ MODAL_POST_INPUT_TITLE }
+                  placeholder={ MODAL_POST_INPUT_TITLE }
                   defaultValue={isNewPost ? '' : post.title}
                   />
               )}
@@ -130,15 +141,15 @@ class PostEdit extends Component {
                 <Form.Input
                   error
                   name='author'
-                  label='Autor'
-                  placeholder='Autor'
+                  label={ MODAL_POST_INPUT_AUTHOR }
+                  placeholder={ MODAL_POST_INPUT_AUTHOR }
                   onChange={this.handleFormInputChange}
                 />
               ) : (
                 <Form.Input
                   name='author'
-                  label='Autor'
-                  placeholder='Autor'
+                  label={ MODAL_POST_INPUT_AUTHOR }
+                  placeholder={ MODAL_POST_INPUT_AUTHOR }
                   defaultValue={isNewPost ? '' : post.author}
                 />
               )}
@@ -146,15 +157,15 @@ class PostEdit extends Component {
                 <Form.TextArea
                   error
                   name='body'
-                  label='Corpo'
-                  placeholder='Corpo'
+                  label={ MODAL_POST_INPUT_BODY }
+                  placeholder={ MODAL_POST_INPUT_BODY }
                   onChange={this.handleFormInputChange}
                 />
               ) : (
                 <Form.TextArea
                   name='body'
-                  label='Corpo'
-                  placeholder='Corpo'
+                  label={ MODAL_POST_INPUT_BODY }
+                  placeholder={ MODAL_POST_INPUT_BODY }
                   defaultValue={isNewPost ? '' : post.body}
                 />
               )}
@@ -162,17 +173,17 @@ class PostEdit extends Component {
                 <Form.Select
                   error
                   fluid
-                  label='Categoria'
+                  label={ MODAL_POST_INPUT_CATEGORY }
                   options={options}
-                  placeholder='Escolha uma categoria'
+                  placeholder={ MODAL_POST_CATEGORY_NONE }
                   onChange={ this.handleFormCategoryChange }
                 />
               ) : (
                 <Form.Select
                   fluid
-                  label='Categoria'
+                  label={ MODAL_POST_INPUT_CATEGORY }
                   options={options}
-                  placeholder='Escolha uma categoria'
+                  placeholder={ MODAL_POST_CATEGORY_NONE }
                   onChange={ this.handleFormCategoryChange }
                   defaultValue={isNewPost ? '' : post.category}
                 />
@@ -181,7 +192,7 @@ class PostEdit extends Component {
               <Form.Button
                 primary
                 floated='right'
-                content='Publicar'
+                content={ MODAL_POST_BUTTON_LABEL }
                 labelPosition='left'
                 icon='edit'
               />

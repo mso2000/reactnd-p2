@@ -32,7 +32,14 @@ export const MODAL_DELETE_TITLE = 'Atenção!'
 export const MODAL_DELETE_BUTTON_CANCEL = 'Não'
 export const MODAL_DELETE_BUTTON_CONFIRM = 'Sim'
 
-// TODO: Adicionar strings de PostEdit
+export const MODAL_POST_LABEL_NEW = 'Criar um novo post'
+export const MODAL_POST_LABEL_EDIT = 'Editar post'
+export const MODAL_POST_INPUT_TITLE = 'Título'
+export const MODAL_POST_INPUT_AUTHOR = 'Autor'
+export const MODAL_POST_INPUT_BODY = 'Corpo'
+export const MODAL_POST_INPUT_CATEGORY = 'Categoria'
+export const MODAL_POST_CATEGORY_NONE = 'Escolha uma categoria'
+export const MODAL_POST_BUTTON_LABEL = 'Publicar'
 
 export const MODAL_COMMENT_LABEL_NEW = 'Criar um novo comentário'
 export const MODAL_COMMENT_LABEL_EDIT = 'Editar comentário'
