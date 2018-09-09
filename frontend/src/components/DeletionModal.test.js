@@ -33,6 +33,8 @@ describe('[Component] DeletionModal', () => {
   describe('render modal buttons', () => {
     beforeEach(() => {
       container = wrapper.find('Button')
+      setup.onCancel.mockClear()
+      setup.onConfirm.mockClear()
     })
 
     it('should have 2 Buttons', () => {
