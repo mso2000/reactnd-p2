@@ -16,7 +16,7 @@ import {
   MODAL_POST_BUTTON_LABEL
 } from '../utils/constants.js'
 
-class PostEdit extends Component {
+export class PostEdit extends Component {
   state = {
     formIsInvalid: false,
     category: '',
