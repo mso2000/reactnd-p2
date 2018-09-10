@@ -18,9 +18,7 @@ class App extends Component {
     return (
       <Grid divided='vertically' columns='equal' style={{ padding: '1em' }}>
         <Grid.Row columns={1}>
-          <Route path = '/' render={({history}) => (
-            <HeaderMenu history={history}/>
-          )} />
+          <Route exact path = '/' component = {HeaderMenu} />
         </Grid.Row>
         <Grid.Row columns={2}>
           <Route exact path = '/' component = {CategoryMenu} />

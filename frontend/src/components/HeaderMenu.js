@@ -13,10 +13,10 @@ import {
   HEADER_BUTTON_LABEL
 } from '../utils/constants.js'
 
-class HeaderMenu extends Component {
+export class HeaderMenu extends Component {
   state = { newPostModalOpen: false }
 
-  handleMenuItemClick = (e, obj) => this.props.selectSortOrder(obj.name)
+  handleMenuItemClick = (e, { name }) => this.props.selectSortOrder(name)
   openNewPostModal = () => this.setState({ newPostModalOpen: true })
   closeNewPostModal = () => this.setState({ newPostModalOpen: false })
 
