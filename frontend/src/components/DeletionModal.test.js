@@ -1,5 +1,5 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import DeletionModal from './DeletionModal'
 import { Button } from 'semantic-ui-react'
 
@@ -14,7 +14,7 @@ describe('[Component] DeletionModal', () => {
     modalOpen: true
   }
 
-  const wrapper = mount(<DeletionModal {...setup} />)
+  const wrapper = shallow(<DeletionModal {...setup} />)
 
   describe('render modal body', () => {
     beforeEach(() => {

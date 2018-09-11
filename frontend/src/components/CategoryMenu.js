@@ -6,7 +6,7 @@ import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import { MAIN_MENU_ITEM_ALL } from '../utils/constants.js'
 
-const CategoryMenu = (props) => {
+export const CategoryMenu = (props) => {
   const { categories, match, fetchData } = props
 
   return (
