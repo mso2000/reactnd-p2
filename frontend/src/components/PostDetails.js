@@ -97,7 +97,7 @@ class PostDetails extends Component {
   }
 
   render() {
-    const { comments, sortOrder, addNewComment, voteComment } = this.props
+    const { comments, sortOrder, addNewComment, voteComment, match} = this.props
     const { currentPost, currentComment, editModalOpen, deleteModalOpen } = this.state
 
     const sortedComments = comments
@@ -106,7 +106,8 @@ class PostDetails extends Component {
 
     return (
       <Grid.Column>
-        {currentPost.hasOwnProperty('id') ? (
+        {currentPost.hasOwnProperty('id') &&
+        (currentPost.category === match.params.category) ? (
           <Segment style={{ padding: '2em' }}>
             <Post
               showDetails = { true }
