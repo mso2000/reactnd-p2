@@ -7,7 +7,7 @@ import sortBy from 'sort-by'
 import PropTypes from 'prop-types'
 import { POST_LIST_ERROR } from '../utils/constants.js'
 
-const PostList = (props) => {
+export const PostList = (props) => {
   const { posts, sortOrder, match } = props
 
   const sortedPosts = (match.url === '/'
