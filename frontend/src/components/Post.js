@@ -17,7 +17,7 @@ import {
   MODAL_POST_DELETE_BODY
 } from '../utils/constants.js'
 
-class Post extends Component {
+export class Post extends Component {
   state = {
     editModalOpen: false,
     deleteModalOpen: false,
@@ -140,10 +140,6 @@ class Post extends Component {
   }
 }
 
-function mapStateToProps ({ sortOrder }) {
-  return { sortOrder }
-}
-
 function mapDispatchToProps (dispatch) {
   return {
     fetchData: () => dispatch(fetchData()),
@@ -160,9 +156,8 @@ Post.propTypes = {
   removePost: PropTypes.func.isRequired,
   selectedPost: PropTypes.object.isRequired,
   showDetails: PropTypes.bool.isRequired,
-  sortOrder: PropTypes.string.isRequired,
   updatePost: PropTypes.func.isRequired,
   votePost: PropTypes.func.isRequired
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Post))
+export default withRouter(connect(null, mapDispatchToProps)(Post))

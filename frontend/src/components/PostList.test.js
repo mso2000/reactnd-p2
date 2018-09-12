@@ -9,11 +9,7 @@ describe('[Component] PostList', () => {
   let wrapper, container, setup
   const sortOrder = ['voteScore', 'timestamp']
 
-  describe('render header menu', () => {
-    beforeEach(() => {
-//      container = wrapper.find('Button')
-    })
-
+  describe('render posts list', () => {
     it('Should display error when no posts', () => {
       setup = {
         match: {url: '/'},
