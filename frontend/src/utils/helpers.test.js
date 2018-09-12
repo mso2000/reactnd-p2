@@ -1,4 +1,3 @@
-import React from 'react'
 import { formatData } from '../utils/helpers.js'
 
 describe('[Function] formatData', () => {
