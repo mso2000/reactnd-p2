@@ -34,7 +34,7 @@ export const posts = [
     category: "redux",
     voteScore: -5,
     deleted: false,
-    commentCount: 0
+    commentCount: 1
   }
 ]
 
@@ -56,6 +56,16 @@ export const comments = [
 		body: "Comments. Are. Cool.",
 		author: "thingone",
 		voteScore: -5,
+		deleted: false,
+		parentDeleted: false
+	},
+  {
+		id: "7v94bsun805n8un48ve78",
+		parentId: "6ni6ok3ym7mf1p33lnez",
+		timestamp: 1469479767190,
+		body: "Just another comment",
+		author: "thingthree",
+		voteScore: -1,
 		deleted: false,
 		parentDeleted: false
 	}

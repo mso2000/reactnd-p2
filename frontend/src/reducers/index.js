@@ -54,6 +54,10 @@ function posts (state = [], action) {
       return state.filter(p => p.id !== action.post.id)
     case UPDATE_POST :
       return [...state.filter(p => p.id !== action.post.id), action.post]
+    case ADD_ALL_POST_COMMENTS :
+      parentPost = state.find(p => p.id === action.post.id)
+      parentPost.commentCount = action.comments.length
+      return [...state.filter(p => p.id !== action.post.id), parentPost]
     case ADD_COMMENT :
       parentPost = state.find(p => p.id === action.comment.parentId)
       parentPost.commentCount++
