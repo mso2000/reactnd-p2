@@ -1,8 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import DeletionModal from './DeletionModal'
-import { Button } from 'semantic-ui-react'
-
 
 describe('[Component] DeletionModal', () => {
   let container

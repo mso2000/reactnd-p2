@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { HeaderMenu } from './HeaderMenu'
-import { Button } from 'semantic-ui-react'
 import { HEADER_BUTTON_LABEL } from '../utils/constants.js'
 
 describe('[Component] HeaderMenu', () => {

@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { PostList } from './PostList'
-import { Segment } from 'semantic-ui-react'
 import { posts } from '../utils/mockStore.js'
 import { POST_LIST_ERROR } from '../utils/constants.js'
 
