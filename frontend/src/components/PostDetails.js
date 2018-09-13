@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { fetchData, fetchPostComments, addNewComment,
+import { fetchPostComments, addNewComment,
         updateComment, removeComment, voteComment } from '../actions'
 import { withRouter } from 'react-router-dom'
 import { Grid, Segment, Label, Icon, Comment,
@@ -24,7 +24,7 @@ import {
   MODAL_COMMENT_DELETE_BODY
 } from '../utils/constants.js'
 
-class PostDetails extends Component {
+export class PostDetails extends Component {
   state = {
     currentPost: {},
     currentComment: {},
@@ -199,7 +199,6 @@ function mapStateToProps ({ posts, comments, sortOrder }) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    fetchData: () => dispatch(fetchData()),
     fetchPostComments: (data) => dispatch(fetchPostComments(data)),
     addNewComment: (data) => dispatch(addNewComment(data)),
     updateComment: (oldData, newData) => dispatch(updateComment(oldData, newData)),
@@ -211,7 +210,6 @@ function mapDispatchToProps (dispatch) {
 PostDetails.propTypes = {
   addNewComment: PropTypes.func.isRequired,
   comments: PropTypes.array.isRequired,
-  fetchData: PropTypes.func.isRequired,
   fetchPostComments: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
   posts: PropTypes.array.isRequired,

@@ -61,6 +61,11 @@ describe('[Component] CommentEdit', () => {
       wrapper.find('form').simulate('submit')
       expect(setup.onChangeComment).toHaveBeenCalled()
     })
+
+    it('should set proper state on handleFormInputChange call', () => {
+      wrapper.instance().handleFormInputChange(null, {name: 'author', value: 'Some Author'})
+      expect(wrapper.state().author).toEqual('Some Author')
+    })
   })
 
   describe('render modal to edit existing comment', () => {

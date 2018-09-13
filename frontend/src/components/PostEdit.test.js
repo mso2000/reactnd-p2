@@ -52,6 +52,16 @@ describe('[Component] PostEdit', () => {
       wrapper.find('form').simulate('submit')
       expect(setup.onChangePost).toHaveBeenCalled()
     })
+
+    it('should set proper state on handleFormCategoryChange call', () => {
+      wrapper.instance().handleFormCategoryChange(null, { value: 'react'})
+      expect(wrapper.state().category).toEqual('react')
+    })
+
+    it('should set proper state on handleFormInputChange call', () => {
+      wrapper.instance().handleFormInputChange(null, {name: 'author', value: 'Some Author'})
+      expect(wrapper.state().author).toEqual('Some Author')
+    })
   })
 
   describe('render modal to edit new post', () => {

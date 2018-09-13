@@ -35,6 +35,17 @@ export const posts = [
     voteScore: -5,
     deleted: false,
     commentCount: 1
+  },
+  {
+    id: "5ui6ok3ym7mf1p33l472",
+    timestamp: 1468479767190,
+    title: "Just a Post With no Comments!",
+    body: "I don't want comments here",
+    author: "thingthree",
+    category: "react",
+    voteScore: -3,
+    deleted: false,
+    commentCount: 0
   }
 ]
 
