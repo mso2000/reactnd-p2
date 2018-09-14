@@ -20,7 +20,7 @@ export function fetchData() {
     if(getState().categoriesAreLoading) return
     dispatch(categoriesAreLoading(true))
 
-    ServerAPI.getAllCategories()
+    return ServerAPI.getAllCategories()
     .then(c => {
       dispatch(addAllCategories(c))
       dispatch(categoriesAreLoading(false))
@@ -28,7 +28,7 @@ export function fetchData() {
       if(getState().postsAreLoading) return
       dispatch(postsAreLoading(true))
 
-      ServerAPI.getAllPosts()
+      return ServerAPI.getAllPosts()
       .then(p => {
         dispatch(addAllPosts(p))
         dispatch(postsAreLoading(false))
@@ -43,7 +43,7 @@ export function addNewPost(post) {
   return (dispatch) => {
     dispatch(addPost(post))
 
-    ServerAPI.addPost(post)
+    return ServerAPI.addPost(post)
     .then(res => {
       if(!res.hasOwnProperty('id')){
         console.log('Insertion error. Rolling back changes...')
@@ -61,7 +61,7 @@ export function updatePost(oldPost, newPost) {
   return (dispatch) => {
     dispatch(resetPost(newPost))
 
-    ServerAPI.editPost(newPost)
+    return ServerAPI.editPost(newPost)
     .then(res => {
       if(res.hasOwnProperty('error')){
         console.log('Edit error. Rolling back changes...')
@@ -80,7 +80,7 @@ export function removePost(post) {
     const postComments = getState().comments.filter(c => c.parentId === post.id)
     dispatch(deletePost(post))
 
-    ServerAPI.deletePost(post)
+    return ServerAPI.deletePost(post)
     .then(res => {
       if(res.hasOwnProperty('error')){
         console.log('Delete error. Rolling back changes...')
@@ -100,7 +100,7 @@ export function votePost(post, option) {
   return (dispatch) => {
     dispatch(updatePostVoteScore(post, option))
 
-    ServerAPI.votePost(post, option)
+    return ServerAPI.votePost(post, option)
     .then(res => {
       if(res.hasOwnProperty('error')){
         console.log('Vote error. Rolling back changes...')
