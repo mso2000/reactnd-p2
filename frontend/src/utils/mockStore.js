@@ -38,12 +38,12 @@ export const posts = [
   },
   {
     id: "5ui6ok3ym7mf1p33l472",
-    timestamp: 1468479767190,
+    timestamp: 1468279767190,
     title: "Just a Post With no Comments!",
     body: "I don't want comments here",
     author: "thingthree",
     category: "react",
-    voteScore: -3,
+    voteScore: -8,
     deleted: false,
     commentCount: 0
   }

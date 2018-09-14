@@ -19,7 +19,7 @@ describe('[Component] PostList', () => {
       wrapper = shallow(<PostList {...setup} />)
       container = wrapper.find('Segment')
       expect(container).toHaveLength(1)
-      expect(container.find('h3').text()).toEqual(POST_LIST_ERROR)
+      expect(container.childAt(0).text()).toEqual(POST_LIST_ERROR)
     })
 
     it('Should list all posts from store', () => {
@@ -44,10 +44,10 @@ describe('[Component] PostList', () => {
       wrapper = shallow(<PostList {...setup} />)
       container = wrapper.find('Segment')
 
-      const sortedPosts = [
-        container.at(0).find('[showDetails=false]').props().selectedPost,
-        container.at(1).find('[showDetails=false]').props().selectedPost
-      ]
+      const sortedPosts = []
+      container.forEach(node => {
+        sortedPosts.push(node.childAt(0).props().selectedPost)
+      })
 
       expect(sortedPosts).toEqual(posts)
     })
@@ -62,17 +62,17 @@ describe('[Component] PostList', () => {
       wrapper = shallow(<PostList {...setup} />)
       container = wrapper.find('Segment')
 
-      const sortedPosts = [
-        container.at(0).find('[showDetails=false]').props().selectedPost,
-        container.at(1).find('[showDetails=false]').props().selectedPost
-      ]
+      const sortedPosts = []
+      container.forEach(node => {
+        sortedPosts.push(node.childAt(0).props().selectedPost)
+      })
 
-      expect(sortedPosts).toEqual([posts[1], posts[0]])
+      expect(sortedPosts).toEqual([posts[1], posts[2], posts[0]])
     })
 
     it('Should list posts from selected category', () => {
       setup = {
-        match: {url: '/react'},
+        match: {url: '/redux'},
         posts,
         sortOrder: sortOrder[0]
       }
@@ -80,8 +80,8 @@ describe('[Component] PostList', () => {
       wrapper = shallow(<PostList {...setup} />)
       container = wrapper.find('Segment')
       expect(container).toHaveLength(1)
-      expect(container.at(0).find('[showDetails=false]').props().selectedPost)
-        .toEqual(posts[0])
+      expect(container.first().childAt(0).props().selectedPost)
+        .toEqual(posts[1])
     })
   })
 })

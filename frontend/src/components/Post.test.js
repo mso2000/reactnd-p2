@@ -6,7 +6,6 @@ import { formatData } from '../utils/helpers.js'
 
 describe('[Component] Post', () => {
   let wrapper, container, match, setup
-  const sortOder = ['voteScore', 'timestamp']
 
   const defaultSetup = {
     fetchData: jest.fn(),
@@ -67,7 +66,7 @@ describe('[Component] Post', () => {
       const expectedLink = `/${defaultSetup.selectedPost.category}`
       expect(container.props().to).toEqual(expectedLink)
 
-      const renderedCategory = container.props().children.props.children.slice(-1)[0]
+      const renderedCategory = container.childAt(0).children().last().text()
       expect(renderedCategory).toEqual(defaultSetup.selectedPost.category)
     })
 
@@ -79,8 +78,8 @@ describe('[Component] Post', () => {
       expect(container).toHaveLength(1)
       expect(container.exists('Icon')).toEqual(true)
       expect(container.find('Icon').props().name).toEqual('thumbs up')
-      const renderedVoteScore = container.props().children.slice(-1)[0]
-      expect(renderedVoteScore).toEqual(defaultSetup.selectedPost.voteScore)
+      const renderedVoteScore = container.children().last().text()
+      expect(Number(renderedVoteScore)).toEqual(defaultSetup.selectedPost.voteScore)
     })
 
     it('should have vote count and comment count labels in post list', () => {
@@ -99,8 +98,8 @@ describe('[Component] Post', () => {
       for(let i = 0; i < container.length; i++){
         expect(container.at(i).exists('Icon')).toEqual(true)
         expect(container.at(i).find('Icon').props().name).toEqual(expectedLabels[i])
-        const renderedVoteScore = container.at(i).props().children.slice(-1)[0]
-        expect(renderedVoteScore).toEqual(expectedCounts[i])
+        const renderedVoteScore = container.at(i).children().last().text()
+        expect(Number(renderedVoteScore)).toEqual(expectedCounts[i])
       }
     })
 

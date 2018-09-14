@@ -36,8 +36,9 @@ export class PostDetails extends Component {
     this.setState(
       {
         editModalOpen: true,
-        currentComment: comment }
-      )
+        currentComment: comment
+      }
+    )
   }
 
   closeEditCommentModal = () => this.setState(

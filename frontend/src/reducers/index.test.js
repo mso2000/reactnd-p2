@@ -58,15 +58,15 @@ describe('[Reducer]', () => {
     })
 
     it('ADD_POST should add a new post', () => {
-      initialState = {posts: [posts[0]]}
-      store = reducer(initialState, addPost(posts[1]))
+      initialState = {posts: [posts[0], posts[1]]}
+      store = reducer(initialState, addPost(posts[2]))
       expect(store.posts).toEqual(posts)
     })
 
     it('DELETE_POST should delete a post', () => {
       initialState = { posts }
       store = reducer(initialState, deletePost(posts[0]))
-      expect(store.posts).toEqual([posts[1]])
+      expect(store.posts).toEqual([posts[1], posts[2]])
     })
 
     it('UPDATE_POST should delete a post and re-add updated one', () => {
@@ -74,7 +74,7 @@ describe('[Reducer]', () => {
       const updatedPost = {...posts[0]}
       updatedPost.title = 'Another Title'
       store = reducer(initialState, resetPost(updatedPost))
-      expect(store.posts).toEqual([posts[1], updatedPost])
+      expect(store.posts).toEqual([posts[1], posts[2], updatedPost])
     })
 
     it('ADD_ALL_POST_COMMENTS should re-add post with updated comment count', () => {
@@ -82,7 +82,7 @@ describe('[Reducer]', () => {
       const updatedPost = {...posts[0]}
       updatedPost.commentCount = 1
       store = reducer(initialState, addAllPostComments(posts[0], [comments[0]]))
-      expect(store.posts[1]).toEqual(updatedPost)
+      expect(store.posts).toEqual([posts[1], posts[2], updatedPost])
     })
 
     it('ADD_COMMENT should re-add post with updated comment count', () => {
@@ -91,7 +91,7 @@ describe('[Reducer]', () => {
       updatedPost.commentCount++
       const comment = { parentId: posts[0].id }
       store = reducer(initialState, addComment(comment))
-      expect(store.posts).toEqual([posts[1], updatedPost])
+      expect(store.posts).toEqual([posts[1], posts[2], updatedPost])
     })
 
     it('DELETE_COMMENT should re-add post with updated comment count', () => {
@@ -99,7 +99,7 @@ describe('[Reducer]', () => {
       const updatedPost = {...posts[0]}
       updatedPost.commentCount--
       store = reducer(initialState, deleteComment(comments[0]))
-      expect(store.posts).toEqual([posts[1], updatedPost])
+      expect(store.posts).toEqual([posts[1], posts[2], updatedPost])
     })
   })
 
