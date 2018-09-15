@@ -17,7 +17,7 @@ describe('[Actions]', () => {
     commentsAreLoading: false
   })
 
-  beforeEach(() => store.clearActions());
+  beforeEach(() => store.clearActions())
 
   describe('Action Creators tests', () => {
     describe('loading control', () => {
@@ -177,6 +177,22 @@ describe('[Actions]', () => {
   })
 
   describe('Async middleware tests', () => {
+    describe('fetchData', () => {
+      it('should fetch all categories and posts setting loading states', () => {
+        const expectedActions = [
+          { type: actions.CATEGORIES_ARE_LOADING, isLoading: true },
+          { type: actions.ADD_CATEGORIES, categories },
+          { type: actions.CATEGORIES_ARE_LOADING, isLoading: false },
+          { type: actions.POSTS_ARE_LOADING, isLoading: true },
+          { type: actions.ADD_ALL_POSTS, posts },
+          { type: actions.POSTS_ARE_LOADING, isLoading: false },
+        ]
+
+        return store.dispatch(actions.fetchData())
+        .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+    })
+
     describe('addNewPost', () => {
       it('should add valid post', () => {
           const expectedActions = [
@@ -327,8 +343,178 @@ describe('[Actions]', () => {
       })
     })
 
-    describe('test', () => {
+    describe('fetchPostComments', () => {
+      it('should fetch all post comments setting loading states', () => {
+        const expectedActions = [
+          { type: actions.COMMENTS_ARE_LOADING, isLoading: true },
+          { type: actions.ADD_ALL_POST_COMMENTS, post: posts[1], comments: comments[2]},
+          { type: actions.COMMENTS_ARE_LOADING, isLoading: false }
+        ]
 
+        return store.dispatch(actions.fetchPostComments(posts[1]))
+        .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+
+      it('should do nothing on server error', () => {
+        const invalidPost = { reject: 'invalid' }
+        const expectedActions = [
+          { type: actions.COMMENTS_ARE_LOADING, isLoading: true },
+          { type: actions.COMMENTS_ARE_LOADING, isLoading: false }
+        ]
+
+        console.log = jest.fn(console.log).mockImplementationOnce(null)
+
+        return store.dispatch(actions.fetchPostComments(invalidPost))
+        .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+    })
+
+    describe('addNewComment', () => {
+      it('should add valid comment', () => {
+          const expectedActions = [
+            { type: actions.ADD_COMMENT, comment: comments[0] }
+          ]
+
+          return store.dispatch(actions.addNewComment(comments[0]))
+          .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+
+      it('should rollback changes on server error', () => {
+          const invalidComment = {reject: 'invalid'}
+          const expectedActions = [
+            { type: actions.ADD_COMMENT, comment: invalidComment },
+            { type: actions.DELETE_COMMENT, comment: invalidComment },
+          ]
+
+          console.log = jest.fn(console.log).mockImplementationOnce(null)
+
+          return store.dispatch(actions.addNewComment(invalidComment))
+          .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+
+      it('should rollback changes on insertion error', () => {
+          const invalidComment = {error: 'invalid'}
+          const expectedActions = [
+            { type: actions.ADD_COMMENT, comment: invalidComment },
+            { type: actions.DELETE_COMMENT, comment: invalidComment },
+          ]
+
+          console.log = jest.fn(console.log).mockImplementationOnce(null)
+
+          return store.dispatch(actions.addNewComment(invalidComment))
+          .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+    })
+
+    describe('updateComment', () => {
+      it('should properly edit current comment when valid', () => {
+          const expectedActions = [
+            { type: actions.UPDATE_COMMENT, comment: comments[1] }
+          ]
+
+          return store.dispatch(actions.updateComment(comments[0], comments[1]))
+          .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+
+      it('should rollback changes on server error', () => {
+          const invalidComment = {reject: 'invalid'}
+          const expectedActions = [
+            { type: actions.UPDATE_COMMENT, comment: invalidComment },
+            { type: actions.UPDATE_COMMENT, comment: comments[0] }
+          ]
+
+          console.log = jest.fn(console.log).mockImplementationOnce(null)
+
+          return store.dispatch(actions.updateComment(comments[0], invalidComment))
+          .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+
+      it('should rollback changes on edit error', () => {
+          const invalidComment = {error: 'invalid'}
+          const expectedActions = [
+            { type: actions.UPDATE_COMMENT, comment: invalidComment },
+            { type: actions.UPDATE_COMMENT, comment: comments[0] }
+          ]
+
+          console.log = jest.fn(console.log).mockImplementationOnce(null)
+
+          return store.dispatch(actions.updateComment(comments[0], invalidComment))
+          .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+    })
+
+    describe('removeComment', () => {
+      it('should properly remove comment', () => {
+          const expectedActions = [
+            { type: actions.DELETE_COMMENT, comment: comments[0] }
+          ]
+
+          return store.dispatch(actions.removeComment(comments[0]))
+          .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+
+      it('should rollback changes on server error', () => {
+          const invalidComment = {...comments[0], reject: 'invalid'}
+          const expectedActions = [
+            { type: actions.DELETE_COMMENT, comment: invalidComment },
+            { type: actions.ADD_COMMENT, comment: invalidComment },
+          ]
+
+          console.log = jest.fn(console.log).mockImplementationOnce(null)
+
+          return store.dispatch(actions.removeComment(invalidComment))
+          .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+
+      it('should rollback changes on delete error', () => {
+          const invalidComment = {...comments[0], error: 'invalid'}
+          const expectedActions = [
+            { type: actions.DELETE_COMMENT, comment: invalidComment },
+            { type: actions.ADD_COMMENT, comment: invalidComment },
+          ]
+
+          console.log = jest.fn(console.log).mockImplementationOnce(null)
+
+          return store.dispatch(actions.removeComment(invalidComment))
+          .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+    })
+
+    describe('voteComment', () => {
+      it('should properly update current comment voteScore', () => {
+          const expectedActions = [
+            { type: actions.UPDATE_COMMENT, comment: {...comments[0], voteScore: comments[0].voteScore + 1} },
+          ]
+
+          return store.dispatch(actions.voteComment(comments[0], 'upVote'))
+          .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+
+      it('should rollback changes on server error', () => {
+          const invalidComment = {...comments[0], reject: 'invalid'}
+          const expectedActions = [
+            { type: actions.UPDATE_COMMENT, comment: {...invalidComment, voteScore: invalidComment.voteScore + 1} },
+            { type: actions.UPDATE_COMMENT, comment: invalidComment }
+          ]
+
+          console.log = jest.fn(console.log).mockImplementationOnce(null)
+
+          return store.dispatch(actions.voteComment(invalidComment, 'upVote'))
+          .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
+
+      it('should rollback changes on edit error', () => {
+          const invalidComment = {...comments[0], error: 'invalid'}
+          const expectedActions = [
+            { type: actions.UPDATE_COMMENT, comment: {...invalidComment, voteScore: invalidComment.voteScore + 1} },
+            { type: actions.UPDATE_COMMENT, comment: invalidComment }
+          ]
+
+          console.log = jest.fn(console.log).mockImplementationOnce(null)
+
+          return store.dispatch(actions.voteComment(invalidComment, 'upVote'))
+          .then(() => expect(store.getActions()).toEqual(expectedActions))
+      })
     })
   })
 })

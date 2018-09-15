@@ -33,9 +33,15 @@ export function fetchData() {
         dispatch(addAllPosts(p))
         dispatch(postsAreLoading(false))
       })
-      .catch(error => console.log(`Server error: ${error}.`))
+      .catch(error => {
+        dispatch(postsAreLoading(false))
+        console.log(`Server error: ${error}.`)
+      })
     })
-    .catch(error => console.log(`Server error: ${error}.`))
+    .catch(error => {
+      dispatch(categoriesAreLoading(false))
+      console.log(`Server error: ${error}.`)
+    })
   }
 }
 
@@ -185,12 +191,15 @@ export function fetchPostComments(post) {
     if(getState().commentsAreLoading) return
     dispatch(commentsAreLoading(true))
 
-    ServerAPI.getComments(post)
+    return ServerAPI.getComments(post)
     .then(comments => {
       dispatch(addAllPostComments(post, comments))
       dispatch(commentsAreLoading(false))
     })
-    .catch(error => console.log(`Server error: ${error}.`))
+    .catch(error => {
+      dispatch(commentsAreLoading(false))
+      console.log(`Server error: ${error}.`)
+    })
   }
 }
 
@@ -198,7 +207,7 @@ export function addNewComment(comment) {
   return (dispatch) => {
     dispatch(addComment(comment))
 
-    ServerAPI.addComment(comment)
+    return ServerAPI.addComment(comment)
     .then(res => {
       if(!res.hasOwnProperty('id')){
         console.log('Insertion error. Rolling back changes...')
@@ -216,7 +225,7 @@ export function updateComment(oldComment, newComment) {
   return (dispatch) => {
     dispatch(resetComment(newComment))
 
-    ServerAPI.editComment(newComment)
+    return ServerAPI.editComment(newComment)
     .then(res => {
       if(res.hasOwnProperty('error')){
         console.log('Edit error. Rolling back changes...')
@@ -234,7 +243,7 @@ export function removeComment(comment) {
   return (dispatch) => {
     dispatch(deleteComment(comment))
 
-    ServerAPI.deleteComment(comment)
+    return ServerAPI.deleteComment(comment)
     .then(res => {
       if(res.hasOwnProperty('error')){
         console.log('Delete error. Rolling back changes...')
@@ -252,7 +261,7 @@ export function voteComment(comment, option) {
   return (dispatch) => {
     dispatch(updateCommentVoteScore(comment, option))
 
-    ServerAPI.voteComment(comment, option)
+    return ServerAPI.voteComment(comment, option)
     .then(res => {
       if(res.hasOwnProperty('error')){
         console.log('Vote error. Rolling back changes...')
