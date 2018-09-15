@@ -16,6 +16,9 @@ import {
   MODAL_POST_BUTTON_LABEL
 } from '../utils/constants.js'
 
+/**
+ * Exibe o Modal para criação/edição de um post
+ */
 export class PostEdit extends Component {
   state = {
     formIsInvalid: false,
@@ -40,6 +43,24 @@ export class PostEdit extends Component {
     )
   }
 
+  /**
+   * Para o envio do formulário, é necessário que o título, autor e corpo do
+   * post estejam presentes, assim como a categoria selecionada
+   *
+   * Em caso positivo, são adicionados:
+   * - um UUID para o post
+   * - o timestamp atual
+   * - outros dados padrão de um novo post
+   *
+   * OBS: Se for a edição de um post existente, apenas o timestamp é
+   * atualizado
+   *
+   * Após, o Modal é fechado enviando os dados a serem inseridos/editados para o
+   * componente pai e o app redireciona para os detalhes do post em questão.
+   *
+   * Em caso negativo, o formulário é marcado como inválido e os campos em branco
+   * ganham destaque na UI.
+   */
   handleSubmit = (e) => {
     e.preventDefault()
     const {isNewPost, post, onChangePost, history} = this.props

@@ -13,6 +13,9 @@ import {
   HEADER_BUTTON_LABEL
 } from '../utils/constants.js'
 
+/**
+ * Exibe o cabeçalho do app com os botões de ordenação e criação de um novo post
+ */
 export class HeaderMenu extends Component {
   state = { newPostModalOpen: false }
 

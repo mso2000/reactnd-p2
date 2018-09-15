@@ -8,6 +8,9 @@ import {
   MODAL_DELETE_BUTTON_CONFIRM
 } from '../utils/constants.js'
 
+/**
+ * Modal de uso genérico para deleção de posts ou comentários
+ */
 const DeletionModal = (props) => {
 	const { modalOpen, modalBody, onCancel, onConfirm } = props
 

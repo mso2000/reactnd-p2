@@ -24,6 +24,13 @@ import {
   MODAL_COMMENT_DELETE_BODY
 } from '../utils/constants.js'
 
+/**
+ * Exibe os detalhes de um post e a lista de comentários com os respectivos
+ * controles e ordenados conforme botão selecionado no cabeçado do app (HeaderMenu)
+ *
+ * Quando não existem comentários, é exibida uma mensagem e quando o post não é
+ * válido (rota inválida) é exibida uma outra mensagem de erro.
+ */
 export class PostDetails extends Component {
   state = {
     currentPost: {},
@@ -84,6 +91,16 @@ export class PostDetails extends Component {
     }
   }
 
+  /**
+   * Carrega os comentários do backend apenas quando já existem posts na Store.
+   * É necessário fazer isso pois quando esse componente é carregado antes da
+   * lista de posts (pelo uso da rota de um post) os posts ainda não foram
+   * carregados para a Store.
+   *
+   * E o estado do post atual só é setado quando há mudança no conteúdo dos posts
+   * para evitar um loop infinito, pois o fetchPostComments provoca uma nova
+   * execução deste método.
+   */
   componentDidUpdate(prevProps){
     const { match, posts, fetchPostComments } = this.props
     const currentPost = posts.find(p => p.id === match.params.id)

@@ -1,5 +1,7 @@
+/**
+ * Todos os métodos necessários para manipulação do backend
+ */
 const api = "http://localhost:3001"
-
 
 let token = localStorage.token
 if (!token)

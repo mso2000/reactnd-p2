@@ -17,6 +17,16 @@ import {
   MODAL_POST_DELETE_BODY
 } from '../utils/constants.js'
 
+/**
+ * Exibe o cabeçalho do post
+ *
+ * Quando o app está exibindo a lista de posts, vemos apenas o título, scores e
+ * botões de controle. O título também tem um link para abrir os detalhes
+ *
+ * Quando o app está exibindo detalhes de um post, vemos o título (sem link),
+ * corpo, score de votos (o de cometários é exibido na lista dos mesmos) e botões
+ * de controle
+ */
 export class Post extends Component {
   state = {
     editModalOpen: false,
@@ -34,6 +44,10 @@ export class Post extends Component {
     updatePost(selectedPost, newPost)
   }
 
+  /**
+   * Quando a deleção de um post é confirmada, o app redireciona para a lista
+   * de posts (a mesma do post removido)
+   */
   handleDeleteModalAction = () => {
     const { removePost, selectedPost, history, match } = this.props
     removePost(selectedPost)

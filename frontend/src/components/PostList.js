@@ -7,6 +7,13 @@ import sortBy from 'sort-by'
 import PropTypes from 'prop-types'
 import { POST_LIST_ERROR } from '../utils/constants.js'
 
+/**
+ * Exibe a lista de posts (apenas cabeçalhos) conforme a categoria selecionada e
+ * ordenada conforme botão selecionado no cabeçalho do app (HeaderMenu)
+ *
+ * Quando não há posts para a categoria ou foi informado uma rota inválida é
+ * exibida uma mensagem de erro.
+ */
 export const PostList = (props) => {
   const { posts, sortOrder, match } = props
 

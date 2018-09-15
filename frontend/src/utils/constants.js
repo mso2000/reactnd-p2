@@ -1,3 +1,6 @@
+/**
+ * Todos os textos da UI
+ */
 export const HEADER_APP_NAME = 'Leitura'
 export const HEADER_SORT_LABEL = 'Ordenar por'
 export const HEADER_MENU_ITEM_DATE = 'Data'

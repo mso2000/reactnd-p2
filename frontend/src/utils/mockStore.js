@@ -1,3 +1,6 @@
+/**
+ * Dados para testes da Store
+ */
 export const categories = [
   {
     name: "react",

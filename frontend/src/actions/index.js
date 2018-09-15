@@ -14,7 +14,11 @@ export const ADD_COMMENT = 'ADD_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const UPDATE_COMMENT = 'UPDATE_COMMENT'
 
-
+/**
+ * Busca todas as categorias e posts do backend
+ * Para evitar concorrências desnecessárias, são setados flags na Store que
+ * indicam que os dados ainda estão sendo buscados no servidor ou já retornaram.
+ */
 export function fetchData() {
   return (dispatch, getState) => {
     if(getState().categoriesAreLoading) return
@@ -45,7 +49,11 @@ export function fetchData() {
   }
 }
 
-export function addNewPost(post) {
+/**
+ * Adiciona um novo post na store e no backend. Em caso de erro no servidor, é
+ * realizado um rollback das alterações na UI
+ */
+ export function addNewPost(post) {
   return (dispatch) => {
     dispatch(addPost(post))
 
@@ -63,6 +71,10 @@ export function addNewPost(post) {
   }
 }
 
+/**
+ * Atualiza um post na store e no backend. Em caso de erro no servidor, é
+ * realizado um rollback das alterações na UI
+ */
 export function updatePost(oldPost, newPost) {
   return (dispatch) => {
     dispatch(resetPost(newPost))
@@ -81,6 +93,11 @@ export function updatePost(oldPost, newPost) {
   }
 }
 
+/**
+ * Remove um post da store e do backend. Em caso de erro no servidor, é
+ * realizado um rollback das alterações na UI
+ * OBS: Esta ação também remove os respectivos comentários de um post
+ */
 export function removePost(post) {
   return (dispatch, getState) => {
     const postComments = getState().comments.filter(c => c.parentId === post.id)
@@ -102,6 +119,10 @@ export function removePost(post) {
   }
 }
 
+/**
+ * Atualiza o score de votos de um post na store e no backend. Em caso de erro
+ * no servidor, é realizado um rollback das alterações na UI
+ */
 export function votePost(post, option) {
   return (dispatch) => {
     dispatch(updatePostVoteScore(post, option))
@@ -186,7 +207,12 @@ export function updatePostVoteScore(post, option) {
   }
 }
 
-export function fetchPostComments(post) {
+/**
+ * Busca todas os comentários de um post do backend
+ * Para evitar concorrências desnecessárias, são setados flags na Store que
+ * indicam que os dados ainda estão sendo buscados no servidor ou já retornaram.
+ */
+ export function fetchPostComments(post) {
   return (dispatch, getState) => {
     if(getState().commentsAreLoading) return
     dispatch(commentsAreLoading(true))
@@ -203,6 +229,11 @@ export function fetchPostComments(post) {
   }
 }
 
+/**
+ * Adiciona um novo comentário na store e no backend. Em caso de erro no
+ * servidor, é realizado um rollback das alterações na UI
+ * OBS: Esta ação também atualiza a contagem de comentários do post pai
+ */
 export function addNewComment(comment) {
   return (dispatch) => {
     dispatch(addComment(comment))
@@ -221,6 +252,11 @@ export function addNewComment(comment) {
   }
 }
 
+/**
+ * Atualiza um comentário na store e no backend. Em caso de erro no servidor, é
+ * realizado um rollback das alterações na UI
+ * OBS: Esta ação também atualiza a contagem de comentários do post pai
+ */
 export function updateComment(oldComment, newComment) {
   return (dispatch) => {
     dispatch(resetComment(newComment))
@@ -239,6 +275,11 @@ export function updateComment(oldComment, newComment) {
   }
 }
 
+/**
+ * Remove um comentário da store e do backend. Em caso de erro no servidor, é
+ * realizado um rollback das alterações na UI
+ * OBS: Esta ação também atualiza a contagem de comentários do post pai
+ */
 export function removeComment(comment) {
   return (dispatch) => {
     dispatch(deleteComment(comment))
@@ -257,6 +298,10 @@ export function removeComment(comment) {
   }
 }
 
+/**
+ * Atualiza o score de votos de um comentário na store e no backend. Em caso de
+ * erro no servidor, é realizado um rollback das alterações na UI
+ */
 export function voteComment(comment, option) {
   return (dispatch) => {
     dispatch(updateCommentVoteScore(comment, option))

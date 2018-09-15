@@ -6,7 +6,12 @@ import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import { MAIN_MENU_ITEM_ALL } from '../utils/constants.js'
 
-export const CategoryMenu = (props) => {
+/**
+ * Exibe o menu lateral com as categorias. Sempre que uma nova categoria é
+ * selecionada, um novo fetch na API de categorias e posts é realizado para
+ * garantir a sincronia com o backend
+ */
+ export const CategoryMenu = (props) => {
   const { categories, match, fetchData } = props
 
   return (

@@ -1,4 +1,7 @@
-
+/**
+ * Converte um timestamp para uma string amigável.
+ * Ex: 28/06/2016, 23:21:12
+ */
 export function formatData (timestamp) {
   const formatter = {
     year: 'numeric',

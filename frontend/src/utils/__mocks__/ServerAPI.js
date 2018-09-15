@@ -1,5 +1,13 @@
+/**
+ * Arquivo de mock com os métodos de manipulação do backend
+ */
 import { categories, posts, comments } from '../mockStore.js'
 
+/**
+ * Método genérico para simular a maioria dos métodos da API que implementam uma
+ * Promise que recebe um objeto e retorna um JSON. Para provocar um reject, basta
+ * adicionar um atributo "reject" no objeto de entrada
+ */
 export const standardApiPromise = (data = null, option = null) => {
   return new Promise((resolve, reject) => {
     process.nextTick(

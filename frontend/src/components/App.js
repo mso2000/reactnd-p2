@@ -8,6 +8,26 @@ import PostDetails from './PostDetails'
 import { Grid } from 'semantic-ui-react'
 import { Route, withRouter } from 'react-router-dom'
 
+/**
+ * Componente principal do app que possui 3 modos de renderização:
+ *
+ * - padrão (rota: '/')
+ *
+ * Exibe cabeçalho (HeaderMenu), menu lateral (CategoryMenu) e lista de posts
+ * (PostList)
+ *
+ * - por categoria (rota: '/{:category}')
+ *
+ * Exibe cabeçalho (HeaderMenu), menu lateral com a categoria selecionada
+ * (CategoryMenu) e lista de posts (PostList) filtrada (ou mensagem de erro,
+ * em caso de categoria inválida)
+ *
+ * - detalhes do post (rota: '/{:category}/{:id}')
+ *
+ * Exibe cabeçalho (HeaderMenu), menu lateral com a categoria selecionada
+ * (CategoryMenu) e detalhes do post (PostDetails) ou mensagem de erro em caso
+ * de post inválido)
+ */
 class App extends Component {
 
   componentDidMount(){

@@ -11,6 +11,9 @@ import {
   MODAL_COMMENT_BUTTON_LABEL
 } from '../utils/constants.js'
 
+/**
+ * Exibe o Modal para criação/edição de um comentário
+ */
 class CommentEdit extends Component {
   state = {
     formIsInvalid: false,
@@ -30,6 +33,24 @@ class CommentEdit extends Component {
     )
   }
 
+/**
+ * Para o envio do formulário, é necessário que o autor e corpo do comentário
+ * estejam presentes.
+ *
+ * Em caso positivo, são adicionados:
+ * - um UUID para o comentário
+ * - o timestamp atual
+ * - outros dados padrão de um novo comentário
+ *
+ * OBS: Se for a edição de um comentário existente, apenas o timestamp é
+ * atualizado
+ *
+ * Após, o Modal é fechado enviando os dados a serem inseridos/editados para o
+ * componente pai
+ *
+ * Em caso negativo, o formulário é marcado como inválido e os campos em branco
+ * ganham destaque na UI.
+ */
   handleSubmit = (e) => {
     e.preventDefault()
     const { isNewComment, comment, onChangeComment } = this.props
