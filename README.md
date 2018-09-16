@@ -61,6 +61,10 @@ Informações sobre a API do backend podem ser encontradas em seu arquivo [READM
 
 Este projeto foi gerado com [Create React App](https://github.com/facebookincubator/create-react-app). Mais informações [aqui](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
+## Semantic UI React
+
+A interface do usuário deste projeto foi desenvolvida com o framework [Semantic UI React](https://react.semantic-ui.com/).
+
 ## Jest e Enzyme
 
 Este projeto possui testes unitários implementados com [Jest](https://jestjs.io/) e [Enzyme](https://airbnb.io/enzyme/).
