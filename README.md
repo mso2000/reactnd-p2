@@ -4,6 +4,40 @@ Neste projeto temos um aplicativo web de conteúdo e comentários que permitirá
 
 O front-end deverá iteragir com a API de um servidor backend local, desenvolvido em [Node](https://nodejs.org/en/), usando seus endpoints.
 
+**Imagens:**
+
+<table align="center">
+  <tr>
+     <td>
+       <img src="screenshots/p2_1.jpg" width="400" title="Tela principal">
+       <p align="center">Tela Inicial</p>
+     </td>
+     <td>
+       <img src="screenshots/p2_2.jpg" width="400" title="Criação de um post">
+       <p align="center">Criação de um post</p>
+     </td>
+  </tr>
+  <tr>
+     <td>
+       <img src="screenshots/p2_3.jpg" width="400" title="Post criado">
+       <p align="center">Post criado</p>
+     </td>
+     <td>
+       <img src="screenshots/p2_4.jpg" width="400" title="Post com comentários">
+       <p align="center">Post com comentários</p>
+     </td>
+  </tr>
+  <tr>
+     <td>
+       <img src="screenshots/p2_5.jpg" width="400" title="Edição de um comentário">
+       <p align="center">Edição de um comentário</p>
+     </td>
+     <td>
+       <img src="screenshots/p2_6.jpg" width="400" title="Remoção de um comentário">
+       <p align="center">Remoção de um comentário</p>
+    </td>
+  </tr>
+</table>
 
 ## Instalação:
 
